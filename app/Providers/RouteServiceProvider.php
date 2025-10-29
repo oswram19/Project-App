@@ -37,8 +37,8 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
 
-            //se agrega ruta admin
-                Route::middleware('web', 'auth')
+            //se agrega ruta admin para que laravel lo reconozca como ruta valida
+                Route::middleware('web', 'auth')    
                 ->prefix('admin')   //SE AGREGO PREFIJO 
                 ->group(base_path('routes/admin.php'));
         });

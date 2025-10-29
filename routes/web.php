@@ -35,9 +35,10 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::resource('posts', PostController::class)->names('posts.index');
-    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::resource('posts', PostController::class)->names('posts.index');//se agrega names para nombrar la ruta index
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');//se agrega ruta show
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');//se agrega ruta edit
+    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');//se agrega ruta update
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');//se agrega ruta destroy
+
 }); 
