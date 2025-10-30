@@ -56,9 +56,9 @@ const logout = () => {
 
                             <!-- acceso de admin -->
 
-                                  <NavLink :href="route('admin.home')" :active="route().current('admin.home')">
-                                    admin Panel
-                                </NavLink>
+                                  <a :href="route('admin.home')" class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300">
+                                    Admin Panel
+                                </a>
                                 
                                
                             </div>
@@ -173,9 +173,9 @@ const logout = () => {
 
                                         <!-- link panel administrador  -->
 
-                                        <DropdownLink :href="route('admin.home')">
+                                        <a :href="route('admin.home')" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                                             Admin Panel
-                                        </DropdownLink>
+                                        </a>
 
 
                                         <DropdownLink v-if="$page.props.jetstream.hasApiFeatures"

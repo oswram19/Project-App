@@ -13,7 +13,7 @@
         "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "spatie/laravel-permission": "^6.21",
+        "spatie/laravel-permission": "^6.22",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
