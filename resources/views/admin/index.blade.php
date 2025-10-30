@@ -4,6 +4,7 @@
 
 @section('content_header')
     <h1>Proyecto de Oswaldo R.</h1>
+    
 @stop
 
 @section('content')

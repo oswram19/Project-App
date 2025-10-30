@@ -321,16 +321,29 @@ return [
             'can' => 'manage-blog',
         ],
         [
+            //se dejo admin la ruta url para que redirija al home del admin
+
             'text' => 'pages',
-            'url' => 'admin/pages',
+            'url' => 'admin',
             'icon' => 'far fa-fw fa-file',
             'label' => 4,
             'label_color' => 'success',
         ],
+        //se agrega menu usuarios
+        [
+            'text' => 'Usuarios',
+            'url' => 'admin/users/',
+            'icon' => 'far fa-fw fa-user',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
         ['header' => 'account_settings'],
         [
+
+            //se dejo admin la ruta url para que redirija al home del admin
             'text' => 'profile',
-            'url' => 'admin/settings',
+            'url' => 'admin',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
