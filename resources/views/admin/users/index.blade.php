@@ -25,16 +25,7 @@
                         <th>Incorporación</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($users as $user)
-                        <tr>
-                            <td>{{ $user->id }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->created_at }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
+              
             </table>
 
 
@@ -58,10 +49,38 @@
 
     <script>
         new DataTable('#usuarios', {
+            ajax: '/datatable/users', //ruta creada en web.php
+            columns: [
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'email' },
+                { data: 'created_at' },
+            ],
             responsive: true,
-            autoWidth: true
+            autoWidth: true,
+            language: {
+                "lengthMenu": "Mostrar" +
+                    '<select class="custom-select custom-select-sm form-control form-control-sm">' +
+                    '<option value="5">5</option>' +
+                    '<option value="10">10</option>' +
+                    '<option value="25">25</option>' +
+                    '<option value="50">50</option>' +
+                    '<option value="100">100</option>' +
+                    '<option value="-1">todos</option>' +
+                    '</select>' +
+                "registros por página",
+                "zeroRecords": "No se encontro registro - Busca nuevamente",
+                "info": "Mostrando la página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                search: "Buscar:",
+                paginate: {
+                    next: "Siguiente",
+                    previous: "Anterior"
+                }
+            }
         });
     </script>
 
-    
+
 @stop

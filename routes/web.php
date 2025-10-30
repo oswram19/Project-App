@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\DatatableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,9 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+
+    Route::get('datatable/users', [DatatableController::class, 'user'])->name('datatable.user');//se agrega ruta index para ajax datatable
 
     Route::resource('posts', PostController::class)->names('posts.index');//se agrega names para nombrar la ruta index
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');//se agrega ruta show
