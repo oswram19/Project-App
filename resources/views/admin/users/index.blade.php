@@ -23,6 +23,7 @@
                         <th>Name</th>
                         <th>correo</th>
                         <th>Incorporación</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
               
@@ -55,6 +56,18 @@
                 { data: 'name' },
                 { data: 'email' },
                 { data: 'created_at' },
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row) {
+                        return `
+                            <a href="/admin/users/${row.id}/edit" class="btn btn-sm btn-primary">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                        `;
+                    }
+                }
             ],
             responsive: true,
             autoWidth: true,
