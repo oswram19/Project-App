@@ -94,7 +94,7 @@ const logout = () => {
                                             <!-- Team Settings -->
                                             <DropdownLink v-if="$page.props.auth.user.current_team"
                                                 :href="route('teams.show', $page.props.auth.user.current_team)">
-                                                Team Settings
+                                                Opciones de grupo
                                             </DropdownLink>
 
                                             <DropdownLink v-if="$page.props.jetstream.canCreateTeams"
