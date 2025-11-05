@@ -13,6 +13,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
+        return view('admin.categories.index');
     }
 
     /**
@@ -37,6 +38,7 @@ class CategoryController extends Controller
     public function show(string $id)
     {
         //
+        return view('admin.categories.show', compact('category'));
     }
 
     /**
@@ -45,6 +47,7 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         //
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**

@@ -177,6 +177,10 @@ const logout = () => {
                                             Admin Panel
                                         </a>
 
+                                        <a :href="route('admin.categories')" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                                           Categoria
+                                        </a>
+
 
                                         <DropdownLink v-if="$page.props.jetstream.hasApiFeatures"
                                             :href="route('api-tokens.index')">
@@ -256,7 +260,7 @@ const logout = () => {
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
                                 <ResponsiveNavLink as="button">
-                                    Log Out
+                                   Salir 
                                 </ResponsiveNavLink>
                             </form>
 
@@ -272,12 +276,12 @@ const logout = () => {
                                 <ResponsiveNavLink v-if="$page.props.auth.user.current_team" 
                                     :href="route('teams.show', $page.props.auth.user.current_team)"
                                     :active="route().current('teams.show')">
-                                    Team Settings
+                                    Opciones de grupo
                                 </ResponsiveNavLink>
 
                                 <ResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams"
                                     :href="route('teams.create')" :active="route().current('teams.create')">
-                                    Create New Team
+                                    Crear nuevo grupo
                                 </ResponsiveNavLink>
 
                                 <!-- Team Switcher -->
