@@ -27,6 +27,7 @@ Route::get('/', function () {
     ]);
 });
 
+//middleware de autenticacion y verificacion de usuario
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -41,6 +42,8 @@ Route::middleware([
 
     Route::resource('posts', PostController::class)->names('posts.index');//se agrega names para nombrar la ruta index
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');//se agrega ruta show
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');//se agrega ruta create
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');//se agrega ruta store
     Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');//se agrega ruta edit
     Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');//se agrega ruta update
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');//se agrega ruta destroy

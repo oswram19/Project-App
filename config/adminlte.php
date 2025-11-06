@@ -338,6 +338,15 @@ return [
             'label_color' => 'success',
         ],
 
+        //se agrega menu categorias
+        [
+            'text' => 'Categorias',
+            'url' => 'admin/categories/',
+            'icon' => 'far fa-fw fa-user',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
         ['header' => 'account_settings'],
         [
 

@@ -94,7 +94,7 @@ const logout = () => {
                                             <!-- Team Settings -->
                                             <DropdownLink v-if="$page.props.auth.user.current_team"
                                                 :href="route('teams.show', $page.props.auth.user.current_team)">
-                                                Opciones de grupo
+                                                Team Settings
                                             </DropdownLink>
 
                                             <DropdownLink v-if="$page.props.jetstream.canCreateTeams"
@@ -176,12 +176,7 @@ const logout = () => {
                                         <a :href="route('admin.home')" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                                             Admin Panel
                                         </a>
-
-                                        <a :href="route('admin.categories')" class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
-                                           Categoria
-                                        </a>
-
-
+                                             
                                         <DropdownLink v-if="$page.props.jetstream.hasApiFeatures"
                                             :href="route('api-tokens.index')">
                                             API Tokens
