@@ -64,7 +64,7 @@
                         return `
                             <a href="/admin/users/${row.id}/edit" class="btn btn-sm btn-primary">
                                 <i class="fas fa-edit"></i> Editar
-                            </a>
+                            </a>    
                         `;
                     }
                 }
