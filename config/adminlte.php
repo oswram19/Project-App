@@ -321,7 +321,7 @@ return [
             'can' => 'manage-blog',
         ],
         [
-            //se dejo admin la ruta url para que redirija al home del admin
+            //se dejo admin la ruta url para que redirija al home del admin en url' => 'admin' 
 
             'text' => 'pages',
             'url' => 'admin',

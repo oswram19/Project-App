@@ -29,6 +29,45 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Configurar vistas de Fortify para Inertia
+        Fortify::loginView(function () {
+            return inertia('Auth/Login', [
+                'canResetPassword' => \Illuminate\Support\Facades\Route::has('password.request'),
+                'status' => session('status'),
+            ]);
+        });
+
+        Fortify::registerView(function () {
+            return inertia('Auth/Register');
+        });
+
+        Fortify::requestPasswordResetLinkView(function () {
+            return inertia('Auth/ForgotPassword', [
+                'status' => session('status'),
+            ]);
+        });
+
+        Fortify::resetPasswordView(function ($request) {
+            return inertia('Auth/ResetPassword', [
+                'email' => $request->email,
+                'token' => $request->route('token'),
+            ]);
+        });
+
+        Fortify::verifyEmailView(function () {
+            return inertia('Auth/VerifyEmail', [
+                'status' => session('status'),
+            ]);
+        });
+
+        Fortify::twoFactorChallengeView(function () {
+            return inertia('Auth/TwoFactorChallenge');
+        });
+
+        Fortify::confirmPasswordView(function () {
+            return inertia('Auth/ConfirmPassword');
+        });
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
