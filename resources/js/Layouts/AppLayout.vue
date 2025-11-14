@@ -55,12 +55,11 @@ const logout = () => {
 
 
                                 <!-- acceso de admin -->
-
-                                <a :href="route('admin.home')"
+                                <a v-if="$page.props.can['admin.home']" :href="route('admin.home')"
                                     class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300">
                                     Panel Administrador
                                 </a>
-
+                              
 
                             </div>
                         </div>
@@ -182,8 +181,7 @@ const logout = () => {
                                         </DropdownLink>
 
                                         <!-- link panel administrador  -->
-
-                                        <a :href="route('admin.home')"
+                                        <a v-if="$page.props.can['admin.home']" :href="route('admin.home')"
                                             class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                                             Panel Administrador
                                         </a>
@@ -258,7 +256,7 @@ const logout = () => {
                                 Perfil
                             </ResponsiveNavLink>
 
-                            <a :href="route('admin.home')"
+                            <a v-if="$page.props.can['admin.home']" :href="route('admin.home')"
                                 class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                                 Panel Administrador
                             </a>
