@@ -11,10 +11,12 @@ import Welcome from '@/Components/Welcome.vue';
             </h2>
         </template>
 
+        <!--mensaje de mantenimiento -->
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="flex flex-col items-center justify-center p-8">
+                    <!--manda a llamar imagen de mantenimiento temporalmente despues se quitara-->
                     <img src="/images/cont7.jpg" alt="En mantenimiento" class="w-125 h-125 mb-6">
                     <p class="text-lg text-gray-700 text-center">Actualmente estamos en mantenimiento de nuestro sitio web. Por favor, vuelva más tarde.</p>
                 </div>
