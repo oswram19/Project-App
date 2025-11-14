@@ -176,7 +176,8 @@ const logout = () => {
                                             Gestionar grupo
                                         </DropdownLink>
 
-                                        <DropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
+                                        <DropdownLink v-if="$page.props.jetstream.canCreateTeams"
+                                            :href="route('teams.create')">
                                             Crear nuevo grupo
                                         </DropdownLink>
 
@@ -278,6 +279,7 @@ const logout = () => {
                             <template v-if="$page.props.jetstream.hasTeamFeatures">
                                 <div class="border-t border-gray-200" />
 
+                                <!-- no tiene instruccion por eso aparece en gris -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     Gestionar grupo
                                 </div>
