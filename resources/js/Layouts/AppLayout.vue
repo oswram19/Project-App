@@ -66,8 +66,8 @@ const logout = () => {
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <div class="ms-3 relative">
-                                <!-- Teams Dropdown -->
-                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
+                                <!-- Teams Dropdown: Solo visible para administradores con permiso admin.home -->
+                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures && $page.props.can['admin.home']" align="right" width="60">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button"
@@ -171,11 +171,13 @@ const logout = () => {
                                             Perfiles
                                         </DropdownLink>
 
-                                        <DropdownLink :href="route('profile.show')">
+                                        <!-- Gestionar grupo: Solo visible para administradores -->
+                                        <DropdownLink v-if="$page.props.can['admin.home']" :href="route('profile.show')">
                                             Gestionar grupo
                                         </DropdownLink>
 
-                                        <DropdownLink v-if="$page.props.jetstream.canCreateTeams"
+                                        <!-- Crear nuevo grupo: Restringido a administradores con capacidad de crear teams -->
+                                        <DropdownLink v-if="$page.props.jetstream.canCreateTeams && $page.props.can['admin.home']"
                                             :href="route('teams.create')">
                                             Crear nuevo grupo
                                         </DropdownLink>
@@ -273,11 +275,11 @@ const logout = () => {
                                 </ResponsiveNavLink>
                             </form>
 
-                            <!-- Team Management -->
-                            <template v-if="$page.props.jetstream.hasTeamFeatures">
+                            <!-- Team Management: Sección completa restringida solo a administradores -->
+                            <template v-if="$page.props.jetstream.hasTeamFeatures && $page.props.can['admin.home']">
                                 <div class="border-t border-gray-200" />
 
-                                <!-- no tiene instruccion por eso aparece en gris -->
+                                <!-- Título de sección (no tiene acción por eso aparece en gris) -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     Gestionar grupo
                                 </div>
