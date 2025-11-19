@@ -64,3 +64,13 @@
     background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
     color: white;
 }
+
+.btn-roles {
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+    color: white;
+}
+
+.btn-roles:hover {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white;
+}

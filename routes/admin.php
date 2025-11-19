@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\PostController;
 Route::get('',[HomeController::class,'index'])->name('admin.home');
 //le decimos que solo agregue index,create,store,edit,update,destroy
 Route::resource('users', UserController::class)->names('admin.users')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+Route::get('users/{user}/edit-data', [UserController::class, 'editData'])->name('admin.users.edit-data');
+Route::put('users/{user}/update-data', [UserController::class, 'updateData'])->name('admin.users.update-data');
 Route::resource('categories', CategoryController::class)->names('admin.categories');
 Route::resource('tags', TagController::class)->names('admin.tags');
 Route::resource('posts', PostController::class)->names('admin.posts');

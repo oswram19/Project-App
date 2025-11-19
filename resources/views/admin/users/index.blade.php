@@ -101,12 +101,19 @@
                     searchable: false,
                     render: function(data, type, row) {
                         return `
-                            <a href="/admin/users/${row.id}/edit" 
+                            <a href="/admin/users/${row.id}/edit-data" 
                                class="btn btn-sm btn-action btn-edit" 
                                data-toggle="tooltip" 
                                data-placement="top" 
-                               title="Editar usuario ${row.name}"> 
+                               title="Editar datos de ${row.name}"> 
                                 <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a href="/admin/users/${row.id}/edit" 
+                               class="btn btn-sm btn-action btn-roles" 
+                               data-toggle="tooltip" 
+                               data-placement="top" 
+                               title="Asignar roles a ${row.name}"> 
+                                <i class="fas fa-user-tag"></i> Roles
                             </a>
                             <button type="button" 
                                     class="btn btn-sm btn-action btn-delete" 

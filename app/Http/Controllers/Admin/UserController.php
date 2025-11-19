@@ -98,4 +98,30 @@ class UserController extends Controller
             return redirect()->route('admin.users.index')->with('error', 'Error al eliminar el usuario');
         }
     }
+
+    /**
+     * Show the form for editing user data.
+     */
+    public function editData(User $user)
+    {
+        return view('admin.users.edit-data', compact('user'));
+    }
+
+    /**
+     * Update user data in storage.
+     */
+    public function updateData(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'Datos del usuario actualizados correctamente');
+    }
 }
