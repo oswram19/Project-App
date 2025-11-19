@@ -27,7 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::all();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -35,7 +36,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        if ($request->has('roles')) {
+            $user->roles()->sync($request->roles);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', 'Usuario creado correctamente');
     }
 
     /**
@@ -72,8 +89,13 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        try {
+            $user->delete();
+            return redirect()->route('admin.users.index')->with('success', 'Usuario eliminado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users.index')->with('error', 'Error al eliminar el usuario');
+        }
     }
 }

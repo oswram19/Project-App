@@ -20,7 +20,7 @@
         <div class="card-header">
             <h3 class="card-title">Lista de Categorías</h3>
             <div class="card-tools">
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-action btn-save btn-sm">
                     <i class="fas fa-plus"></i> Nueva Categoría
                 </a>
             </div>
@@ -44,14 +44,23 @@
                             <td>{{ $category->description }}</td>
                             <td>{{ $category->created_at->format('d/m/Y H:i') }}</td>
                             <td>
-                                <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-primary">
+                                <a href="{{ route('admin.categories.edit', $category) }}" 
+                                   class="btn btn-sm btn-action btn-edit"
+                                   data-toggle="tooltip" 
+                                   data-placement="top" 
+                                   title="Editar categoría {{ $category->name }}">
                                     <i class="fas fa-edit"></i> Editar
                                 </a>
                                 <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro de eliminar esta categoría?')">
-                                        <i class="fas fa-trash"></i> Eliminar 
+                                    <button type="submit" 
+                                            class="btn btn-sm btn-action btn-delete"
+                                            data-toggle="tooltip" 
+                                            data-placement="top" 
+                                            title="Eliminar categoría {{ $category->name }}"
+                                            onclick="return confirm('¿Seguro de eliminar esta categoría?')">
+                                        <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </form>
                             </td>
@@ -68,11 +77,14 @@
 @stop
 
 @section('css')
-    {{-- Estilos CSS adicionales si los necesitas --}}
+    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}">
 @stop
 
 @section('js')
     <script>
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
         console.log("AdminLTE cargado correctamente");
     </script>
 @stop

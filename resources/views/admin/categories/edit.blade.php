@@ -47,10 +47,10 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-action btn-save">
                         <i class="fas fa-save"></i> Actualizar Categoría
                     </button>
-                    <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('admin.categories.index') }}" class="btn btn-action btn-cancel">
                         <i class="fas fa-times"></i> Cancelar
                     </a>
                 </div>
@@ -60,7 +60,7 @@
 @stop
 
 @section('css')
-    {{-- Estilos CSS adicionales si los necesitas --}}
+    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}">
 @stop
 
 @section('js')
