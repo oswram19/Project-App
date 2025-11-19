@@ -53,6 +53,7 @@ Route::middleware([
 
 
     Route::get('datatable/users', [DatatableController::class, 'user'])->name('datatable.user'); //se agrega ruta index para ajax datatable
+    Route::get('datatable/categories', [DatatableController::class, 'category'])->name('datatable.category'); //ruta para ajax datatable de categorías
 
     Route::resource('posts', PostController::class)->names('posts.index'); //se agrega names para nombrar la ruta index
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show'); //se agrega ruta show
