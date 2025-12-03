@@ -348,7 +348,17 @@ return [
             'label_color' => 'success',
         ],
 
+        //se agrega menu contactanos
+        [
+            'text' => 'Contactanos',
+            'route' => 'contactanos.index',
+            'icon' => 'far fa-fw fa-envelope',
+            'label' => 4,
+            'label_color' => 'success',
+        ],
+
         ['header' => 'account_settings'],
+
         [
 
             //se dejo admin la ruta url para que redirija al home del admin
