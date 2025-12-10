@@ -7,7 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>correo electronico </h1>
-    <p>oswaldo</p>
+    <h1>Correo Electrónico de Contacto</h1>
+    <p><strong>Nombre:</strong> {{ $data['nombre'] }}</p>
+    <p><strong>Correo:</strong> {{ $data['correo'] }}</p>
+    <p><strong>Mensaje:</strong></p>
+    <p>{{ $data['mensaje'] }}</p>
 </body>
 </html>

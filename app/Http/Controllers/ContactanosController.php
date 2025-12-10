@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactanosMailable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactanosController extends Controller
 {
@@ -12,16 +14,18 @@ class ContactanosController extends Controller
     }
     public function store(Request $request)
     {
-        // Validar los datos del formulario
-        $validatedData = $request->validate([
+
+        $request->validate([
             'nombre' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'correo' => 'required|email|max:255',
             'mensaje' => 'required|string',
         ]);
-
-        // Aquí puedes manejar el envío del correo electrónico o almacenar los datos en la base de datos
-        // Por ejemplo, enviar un correo electrónico:
-        // Mail::to('
-
-     }
+        // Validar los datos del formulario
+       Mail::to('oswaldo@ozmag.com')
+            ->send(new ContactanosMailable($request->all()));
+       
+            return redirect()->route('contactanos.index')->with('success', 'Tu mensaje ha sido enviado correctamente.');
+       
+ 
+    }
 }
