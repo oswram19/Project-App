@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
@@ -13,6 +13,7 @@ defineProps({
 });
 
 const showingNavigationDropdown = ref(false);
+const isDark = ref(false);
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -25,6 +26,17 @@ const switchToTeam = (team) => {
 const logout = () => {
     router.post(route('logout'));
 };
+
+onMounted(() => {
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark') {
+        isDark.value = true;
+    }
+});
+
+watch(isDark, (value) => {
+    localStorage.setItem('theme', value ? 'dark' : 'light');
+});
 </script>
 
 <template>
@@ -34,8 +46,8 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+        <div :class="['min-h-screen', isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900' : 'bg-gray-100']">
+            <nav :class="isDark ? 'bg-gray-900/80 border-b border-gray-700 text-white' : 'bg-white border-b border-gray-100'">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -49,14 +61,15 @@ const logout = () => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')" :dark="isDark">
                                     Dashboard
                                 </NavLink>
 
 
                                 <!-- acceso de admin -->
                                 <a v-if="$page.props.can['admin.home']" :href="route('admin.home')"
-                                    class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300">
+                                    class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none border-transparent hover:border-gray-300 focus:border-gray-300"
+                                    :class="isDark ? 'text-gray-200 hover:text-white focus:text-white' : 'text-gray-500 hover:text-gray-800 focus:text-gray-700'">
                                     Panel Administrador
                                 </a>
                               
@@ -65,6 +78,31 @@ const logout = () => {
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
+                            <!-- Botón modo claro/oscuro (luna/sol) -->
+                            <button
+                                type="button"
+                                class="me-4 inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 bg-white/80 hover:bg-white shadow-sm transition"
+                                @click="isDark = !isDark"
+                                :aria-label="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+                            >
+                                <!-- Sol para modo oscuro activo (clic vuelve a claro) -->
+                                <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="4" />
+                                    <line x1="12" y1="2" x2="12" y2="4" />
+                                    <line x1="12" y1="20" x2="12" y2="22" />
+                                    <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" />
+                                    <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" />
+                                    <line x1="2" y1="12" x2="4" y2="12" />
+                                    <line x1="20" y1="12" x2="22" y2="12" />
+                                    <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" />
+                                    <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
+                                </svg>
+
+                                <!-- Luna para modo claro activo (clic pasa a oscuro) -->
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12.79A9 9 0 0 1 11.21 3 7 7 0 1 0 21 12.79z" />
+                                </svg>
+                            </button>
                             <div class="ms-3 relative">
                                 <!-- Teams Dropdown: Solo visible para administradores con permiso admin.home -->
                                 <Dropdown v-if="$page.props.jetstream.hasTeamFeatures && $page.props.can['admin.home'] && $page.props.auth.user.current_team" align="right" width="60">
@@ -206,8 +244,35 @@ const logout = () => {
                             </div>
                         </div>
 
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
+                        <!-- Controles móviles: botón tema + hamburguesa -->
+                        <div class="-me-2 flex items-center sm:hidden space-x-2">
+                            <!-- Botón modo claro/oscuro (móvil) -->
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 bg-white/80 hover:bg-white shadow-sm transition"
+                                @click="isDark = !isDark"
+                                :aria-label="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+                            >
+                                <!-- Sol para modo oscuro activo (clic vuelve a claro) -->
+                                <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="4" />
+                                    <line x1="12" y1="2" x2="12" y2="4" />
+                                    <line x1="12" y1="20" x2="12" y2="22" />
+                                    <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" />
+                                    <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" />
+                                    <line x1="2" y1="12" x2="4" y2="12" />
+                                    <line x1="20" y1="12" x2="22" y2="12" />
+                                    <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" />
+                                    <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
+                                </svg>
+
+                                <!-- Luna para modo claro activo (clic pasa a oscuro) -->
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12.79A9 9 0 0 1 11.21 3 7 7 0 1 0 21 12.79z" />
+                                </svg>
+                            </button>
+
+                            <!-- Botón menú hamburguesa -->
                             <button
                                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                                 @click="showingNavigationDropdown = !showingNavigationDropdown">
@@ -230,7 +295,7 @@ const logout = () => {
                 <div :class="{ 'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown }"
                     class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')" :dark="isDark">
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
@@ -254,23 +319,24 @@ const logout = () => {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
+                            <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')" :dark="isDark">
                                 Perfil
                             </ResponsiveNavLink>
 
                             <a v-if="$page.props.can['admin.home']" :href="route('admin.home')"
-                                class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                                class="block w-full px-4 py-2 text-left text-sm leading-5 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                :class="isDark ? 'text-gray-100' : 'text-gray-700'">
                                 Panel Administrador
                             </a>
 
                             <ResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures"
-                                :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
+                                :href="route('api-tokens.index')" :active="route().current('api-tokens.index')" :dark="isDark">
                                 API Tokens
                             </ResponsiveNavLink>
 
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
-                                <ResponsiveNavLink as="button">
+                                <ResponsiveNavLink as="button" :dark="isDark">
                                     Salir
                                 </ResponsiveNavLink>
                             </form>
@@ -328,8 +394,8 @@ const logout = () => {
             </nav>
 
             <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <header v-if="$slots.header" :class="isDark ? 'bg-gray-900/80 shadow' : 'bg-white shadow'">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" :class="isDark ? 'text-white' : 'text-gray-800'">
                     <slot name="header" />
                 </div>
             </header>

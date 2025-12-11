@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 
 const handleClick = (e) => {
     e.preventDefault();
-    alert('¡Bienvenido, inicia sesion !');
+    alert('¡Bienvenido, es necesario iniciar sesion !');
 };
 </script>
 
