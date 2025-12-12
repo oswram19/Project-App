@@ -11,7 +11,7 @@ defineProps({
     <Head title="Privacy Policy" />
 
     <div class="font-sans text-gray-900 antialiased">
-        <div class="pt-4 bg-gray-100">
+        <div class="pt-4 bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900">
             <div class="min-h-screen flex flex-col items-center pt-6 sm:pt-0">
                 <div>
                     <AuthenticationCardLogo />

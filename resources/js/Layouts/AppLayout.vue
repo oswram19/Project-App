@@ -31,11 +31,17 @@ onMounted(() => {
     const stored = localStorage.getItem('theme');
     if (stored === 'dark') {
         isDark.value = true;
+        document.documentElement.classList.add('dark');
     }
 });
 
 watch(isDark, (value) => {
     localStorage.setItem('theme', value ? 'dark' : 'light');
+    if (value) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
 });
 </script>
 
@@ -210,7 +216,8 @@ watch(isDark, (value) => {
                                         </DropdownLink>
 
                                         <!-- Gestionar grupo: Solo visible para administradores -->
-                                        <DropdownLink v-if="$page.props.can['admin.home']" :href="route('profile.show')">
+                                        <DropdownLink v-if="$page.props.can['admin.home'] && $page.props.auth.user.current_team" 
+                                            :href="route('teams.show', $page.props.auth.user.current_team)">
                                             Gestionar grupo
                                         </DropdownLink>
 
@@ -309,10 +316,16 @@ watch(isDark, (value) => {
                             </div>
 
                             <div>
-                                <div class="font-medium text-base text-gray-800">
+                                <div
+                                    class="font-medium text-base"
+                                    :class="isDark ? 'text-white' : 'text-gray-800'"
+                                >
                                     {{ $page.props.auth.user.name }}
                                 </div>
-                                <div class="font-medium text-sm text-gray-500">
+                                <div
+                                    class="font-medium text-sm"
+                                    :class="isDark ? 'text-gray-300' : 'text-gray-500'"
+                                >
                                     {{ $page.props.auth.user.email }}
                                 </div>
                             </div>
