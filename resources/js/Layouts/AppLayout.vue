@@ -87,7 +87,8 @@ watch(isDark, (value) => {
                             <!-- Botón modo claro/oscuro (luna/sol) -->
                             <button
                                 type="button"
-                                class="me-4 inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 bg-white/80 hover:bg-white shadow-sm transition"
+                                :class="['me-4 inline-flex items-center justify-center w-9 h-9 rounded-full shadow-sm transition',
+                                         isDark ? 'border-gray-600 bg-gray-800 hover:bg-gray-700' : 'border-gray-300 bg-white/80 hover:bg-white']"
                                 @click="isDark = !isDark"
                                 :aria-label="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
                             >
@@ -111,7 +112,7 @@ watch(isDark, (value) => {
                             </button>
                             <div class="ms-3 relative">
                                 <!-- Teams Dropdown: Solo visible para administradores con permiso admin.home -->
-                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures && $page.props.can['admin.home'] && $page.props.auth.user.current_team" align="right" width="60">
+                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures && $page.props.can?.['admin.home'] && $page.props.auth.user.current_team" align="right" width="60">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button"
@@ -159,7 +160,7 @@ watch(isDark, (value) => {
                                                     <form @submit.prevent="switchToTeam(team)">
                                                         <DropdownLink as="button">
                                                             <div class="flex items-center">
-                                                                <svg v-if="team.id == $page.props.auth.user.current_team_id"
+                                                                <svg v-if="team.id === $page.props.auth.user.current_team_id"
                                                                     class="me-2 h-5 w-5 text-green-400"
                                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke-width="1.5"
@@ -216,19 +217,19 @@ watch(isDark, (value) => {
                                         </DropdownLink>
 
                                         <!-- Gestionar grupo: Solo visible para administradores -->
-                                        <DropdownLink v-if="$page.props.can['admin.home'] && $page.props.auth.user.current_team" 
+                                        <DropdownLink v-if="$page.props.can?.['admin.home'] && $page.props.auth.user.current_team" 
                                             :href="route('teams.show', $page.props.auth.user.current_team)">
                                             Gestionar grupo
                                         </DropdownLink>
 
                                         <!-- Crear nuevo grupo: Restringido a administradores con capacidad de crear teams -->
-                                        <DropdownLink v-if="$page.props.jetstream.canCreateTeams && $page.props.can['admin.home']"
+                                        <DropdownLink v-if="$page.props.jetstream.canCreateTeams && $page.props.can?.['admin.home']"
                                             :href="route('teams.create')">
                                             Crear nuevo grupo
                                         </DropdownLink>
 
                                         <!-- link panel administrador  -->
-                                        <a v-if="$page.props.can['admin.home']" :href="route('admin.home')"
+                                        <a v-if="$page.props.can?.['admin.home']" :href="route('admin.home')"
                                             class="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
                                             Panel Administrador
                                         </a>
@@ -256,7 +257,8 @@ watch(isDark, (value) => {
                             <!-- Botón modo claro/oscuro (móvil) -->
                             <button
                                 type="button"
-                                class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 bg-white/80 hover:bg-white shadow-sm transition"
+                                :class="['inline-flex items-center justify-center w-8 h-8 rounded-full shadow-sm transition',
+                                         isDark ? 'border-gray-600 bg-gray-800 hover:bg-gray-700' : 'border-gray-300 bg-white/80 hover:bg-white']"
                                 @click="isDark = !isDark"
                                 :aria-label="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
                             >
@@ -336,7 +338,7 @@ watch(isDark, (value) => {
                                 Perfil
                             </ResponsiveNavLink>
 
-                            <a v-if="$page.props.can['admin.home']" :href="route('admin.home')"
+                            <a v-if="$page.props.can?.['admin.home']" :href="route('admin.home')"
                                 class="block w-full px-4 py-2 text-left text-sm leading-5 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                                 :class="isDark ? 'text-gray-100' : 'text-gray-700'">
                                 Panel Administrador
@@ -355,7 +357,7 @@ watch(isDark, (value) => {
                             </form>
 
                             <!-- Team Management: Sección completa restringida solo a administradores -->
-                            <template v-if="$page.props.jetstream.hasTeamFeatures && $page.props.can['admin.home']">
+                            <template v-if="$page.props.jetstream.hasTeamFeatures && $page.props.can?.['admin.home']">
                                 <div class="border-t border-gray-200" />
 
                                 <!-- Título de sección (no tiene acción por eso aparece en gris) -->
@@ -366,12 +368,14 @@ watch(isDark, (value) => {
                                 <!-- Team Settings -->
                                 <ResponsiveNavLink v-if="$page.props.auth.user.current_team"
                                     :href="route('teams.show', $page.props.auth.user.current_team)"
-                                    :active="route().current('teams.show')">
+                                    :active="route().current('teams.show')"
+                                    :dark="isDark">
                                     Opciones de grupo
                                 </ResponsiveNavLink>
 
                                 <ResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams"
-                                    :href="route('teams.create')" :active="route().current('teams.create')">
+                                    :href="route('teams.create')" :active="route().current('teams.create')"
+                                    :dark="isDark">
                                     Crear nuevo grupo
                                 </ResponsiveNavLink>
 
@@ -385,9 +389,9 @@ watch(isDark, (value) => {
 
                                     <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
                                         <form @submit.prevent="switchToTeam(team)">
-                                            <ResponsiveNavLink as="button">
+                                            <ResponsiveNavLink as="button" :dark="isDark">
                                                 <div class="flex items-center">
-                                                    <svg v-if="team.id == $page.props.auth.user.current_team_id"
+                                                    <svg v-if="team.id === $page.props.auth.user.current_team_id"
                                                         class="me-2 h-5 w-5 text-green-400"
                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
