@@ -58,7 +58,7 @@ defineProps({
                 </div>
 
                 <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-end sm:ms-0">
-                    este es un test de page
+                    este es un test de page asi que no deberia de haber ningun contenido real aun.
                 </div>
             </div>
         </div>
