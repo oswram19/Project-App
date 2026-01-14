@@ -18,7 +18,7 @@ import Welcome from '@/Components/Welcome.vue';
                 <div class="flex flex-col items-center justify-center p-8">
                     <!--manda a llamar imagen de mantenimiento temporalmente despues se quitara-->
                     <img src="/images/cont7.jpg" alt="En mantenimiento" class="w-125 h-125 mb-6">
-                    <p class="text-lg text-gray-700 text-center">Actualmente estamos en mantenimiento de nuestro sitio web. Por favor, vuelva más tarde.</p>
+                    <p class="text-lg text-gray-700 text-center">Actualmente estamos en mantenimiento de nuestro sitio web, ya casi!! aguante un poco </p>
                 </div>
                 </div>
             </div>
