@@ -40,11 +40,18 @@
 
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" 
-                           name="password" 
-                           id="password" 
-                           class="form-control @error('password') is-invalid @enderror"
-                           required>
+                    <div class="input-group">
+                        <input type="password" 
+                               name="password" 
+                               id="password" 
+                               class="form-control @error('password') is-invalid @enderror"
+                               required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn" style="border: none; background: none; color: #6c757d;" id="togglePassword">
+                                <i class="fas fa-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
                     @error('password')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
@@ -52,15 +59,27 @@
 
                 <div class="form-group">
                     <label for="password_confirmation">Confirmar Contraseña</label>
-                    <input type="password" 
-                           name="password_confirmation" 
-                           id="password_confirmation" 
-                           class="form-control"
-                           required>
+                    <div class="input-group">
+                        <input type="password" 
+                               name="password_confirmation" 
+                               id="password_confirmation" 
+                               class="form-control"
+                               required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn" style="border: none; background: none; color: #6c757d;" id="togglePasswordConfirmation">
+                                <i class="fas fa-eye" id="eyeIconConfirmation"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Asignar Roles</label>
+                    <label>Asignar Roles <span class="text-danger">*</span></label>
+                    @error('roles')
+                        <div class="alert alert-danger py-1 px-2 mb-2">
+                            <small>{{ $message }}</small>
+                        </div>
+                    @enderror
                     @foreach ($roles as $role)
                         <div class="form-check">
                             <input type="checkbox" 
@@ -96,5 +115,37 @@
 @section('js')
     <script>
         console.log("Formulario de creación de usuario cargado");
+
+        // Función para alternar visibilidad de la contraseña
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordField = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+
+        // Función para alternar visibilidad de la confirmación de contraseña
+        document.getElementById('togglePasswordConfirmation').addEventListener('click', function() {
+            const passwordConfirmationField = document.getElementById('password_confirmation');
+            const eyeIconConfirmation = document.getElementById('eyeIconConfirmation');
+            
+            if (passwordConfirmationField.type === 'password') {
+                passwordConfirmationField.type = 'text';
+                eyeIconConfirmation.classList.remove('fa-eye');
+                eyeIconConfirmation.classList.add('fa-eye-slash');
+            } else {
+                passwordConfirmationField.type = 'password';
+                eyeIconConfirmation.classList.remove('fa-eye-slash');
+                eyeIconConfirmation.classList.add('fa-eye');
+            }
+        });
     </script>
 @stop

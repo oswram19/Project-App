@@ -7,14 +7,17 @@
 @stop
 
 @section('content')
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <!-- Toast de notificación -->
+    <div class="toast" id="notificationToast" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; min-width: 300px;" data-delay="4000">
+        <div class="toast-header" id="toastHeader">
+            <i class="fas fa-check-circle mr-2" id="toastIcon"></i>
+            <strong class="mr-auto" id="toastTitle">Notificación</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-    @endif
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
 
     <div class="card">
         <div class="card-body">
@@ -68,5 +71,41 @@
 @section('js')
     <script>
         console.log("Edición de datos de usuario cargada");
+
+        function showToast(message, type) {
+            const toastHeader = document.getElementById('toastHeader');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastHeader.classList.remove('bg-success', 'bg-danger', 'bg-primary', 'bg-warning', 'bg-info', 'text-white', 'text-dark');
+            toastIcon.classList.remove('fa-check-circle', 'fa-times-circle', 'fa-user-edit', 'fa-edit');
+            
+            if (type === 'edit') {
+                toastHeader.classList.add('bg-info', 'text-white');
+                toastIcon.classList.add('fa-user-edit');
+                toastTitle.textContent = 'Datos Actualizados';
+            } else if (type === 'error') {
+                toastHeader.classList.add('bg-danger', 'text-white');
+                toastIcon.classList.add('fa-times-circle');
+                toastTitle.textContent = 'Error';
+            } else {
+                toastHeader.classList.add('bg-success', 'text-white');
+                toastIcon.classList.add('fa-check-circle');
+                toastTitle.textContent = '¡Éxito!';
+            }
+            
+            toastMessage.textContent = message;
+            $('#notificationToast').toast('show');
+        }
+
+        $(document).ready(function() {
+            @if(session('success'))
+                showToast('{{ session('success') }}', 'edit');
+            @endif
+            @if(session('error'))
+                showToast('{{ session('error') }}', 'error');
+            @endif
+        });
     </script>
 @stop
