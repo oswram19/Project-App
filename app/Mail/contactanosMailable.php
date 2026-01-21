@@ -14,12 +14,14 @@ class ContactanosMailable extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
+    public $archivoPath;
     /**
      * Create a new message instance.
      */
-    public function __construct($data)
+    public function __construct($data, $archivoPath = null)
     {
         $this->data = $data;
+        $this->archivoPath = $archivoPath;
     }
 
     /**
@@ -50,6 +52,12 @@ class ContactanosMailable extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+        
+        if ($this->archivoPath) {
+            $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromStorageDisk('public', $this->archivoPath);
+        }
+        
+        return $attachments;
     }
 }

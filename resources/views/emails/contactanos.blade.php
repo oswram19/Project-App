@@ -12,5 +12,9 @@
     <p><strong>Correo:</strong> {{ $data['correo'] }}</p>
     <p><strong>Mensaje:</strong></p>
     <p>{{ $data['mensaje'] }}</p>
+    @if($archivoPath)
+    <hr>
+    <p><strong>📎 Archivo adjunto:</strong> Se ha incluido un archivo con este correo.</p>
+    @endif
 </body>
 </html>
