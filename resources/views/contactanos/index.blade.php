@@ -8,13 +8,6 @@
 @stop
 
 @section('content')
-    @if(session('success'))
-        <div id="success-message" class="px-4 py-3 rounded" role="alert">
-            <strong class="font-bold">¡Éxito!</strong>
-            <span class="block sm:inline">{{ session('success') }}</span>
-        </div>
-    @endif
-
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Envíanos un mensaje</h3>
@@ -69,7 +62,33 @@
 
 @section('js')
     <script>
-        console.log("AdminLTE cargado correctamente");
+        // ==================== CONFIGURACIÓN TOAST ====================
+        $(document).ready(function() {
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "2000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            @if(session('success'))
+                toastr.success('{{ session('success') }}', '✅ ¡Correo Enviado!');
+            @endif
+
+            @if(session('error'))
+                toastr.error('{{ session('error') }}', '❌ ¡Error!');
+            @endif
+        });
+        // ==============================================================
         
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('contactForm');
@@ -128,18 +147,6 @@
                 document.getElementById('archivoLabel').textContent = 'Seleccionar archivo...';
                 document.getElementById('habilitarArchivo').checked = false;
                 document.getElementById('archivoContainer').style.display = 'none';
-                
-                // Ocultar el mensaje de éxito después de 2 segundos
-                const successMessage = document.getElementById('success-message');
-                if (successMessage) {
-                    setTimeout(function() {
-                        successMessage.style.transition = 'opacity 0.5s';
-                        successMessage.style.opacity = '0';
-                        setTimeout(function() {
-                            successMessage.remove();
-                        }, 500);
-                    }, 2000);
-                }
             @endif
         });
     </script>

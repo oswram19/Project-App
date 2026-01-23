@@ -65,20 +65,6 @@
                 </div>
             </div>
 
-            <!-- Toast de notificación -->
-            <div class="toast" id="deleteToast" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; min-width: 300px;" data-delay="4000">
-                <div class="toast-header" id="toastHeader">
-                    <i class="fas fa-check-circle mr-2" id="toastIcon"></i>
-                    <strong class="mr-auto" id="toastTitle">Notificación</strong>
-                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="toast-body" id="toastMessage">
-                    <!-- Mensaje dinámico -->
-                </div>
-            </div>
-
         </div>
     </div>
 @stop
@@ -227,66 +213,72 @@
             })
             .then(data => {
                 console.log('Response data:', data);
-                // Mostrar toast con el mensaje y color
-                showToast(data.message, data.success ? 'delete' : 'error');
+                // Mostrar toast con toastr - Rojo para eliminar
                 if (data.success) {
+                    toastr.error(data.message, '🗑️ ¡Eliminado!');
                     // Recargar la tabla después de un breve delay
                     setTimeout(() => {
                         $('#usuarios').DataTable().ajax.reload();
                     }, 500);
+                } else {
+                    toastr.error(data.message, '❌ ¡Error!');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Error al procesar la solicitud.', 'error');
+                toastr.error('Error al procesar la solicitud.', '❌ ¡Error!');
             });
         });
 
-        function showToast(message, type) {
-            const toastHeader = document.getElementById('toastHeader');
-            const toastIcon = document.getElementById('toastIcon');
-            const toastTitle = document.getElementById('toastTitle');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            // Limpiar clases anteriores
-            toastHeader.classList.remove('bg-success', 'bg-danger', 'bg-primary', 'bg-info', 'text-white');
-            toastIcon.classList.remove('fa-check-circle', 'fa-times-circle', 'fa-trash-alt', 'fa-user-plus');
-            
-            if (type === 'delete') {
-                // Rojo para eliminar
-                toastHeader.classList.add('bg-danger', 'text-white');
-                toastIcon.classList.add('fa-trash-alt');
-                toastTitle.textContent = 'Eliminado';
-            } else if (type === 'create') {
-                // Azul para agregar/crear
-                toastHeader.classList.add('bg-primary', 'text-white');
-                toastIcon.classList.add('fa-user-plus');
-                toastTitle.textContent = '¡Usuario Creado!';
-            } else if (type === 'success') {
-                // Verde para éxito general
-                toastHeader.classList.add('bg-success', 'text-white');
-                toastIcon.classList.add('fa-check-circle');
-                toastTitle.textContent = '¡Éxito!';
-            } else {
-                // Rojo para error
-                toastHeader.classList.add('bg-danger', 'text-white');
-                toastIcon.classList.add('fa-times-circle');
-                toastTitle.textContent = 'Error';
-            }
-            
-            toastMessage.textContent = message;
-            $('#deleteToast').toast('show');
-        }
-
-        // Mostrar toast si hay mensaje de sesión al cargar la página
+        // ==================== CONFIGURACIÓN TOAST ====================
         $(document).ready(function() {
-            @if(session('success'))
-                showToast('{{ session('success') }}', 'create');
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "2000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // 🟢 CREAR - Verde
+            @if(session('created'))
+                toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
             @endif
+
+            // 🔵 EDITAR/ACTUALIZAR - Azul
+            @if(session('updated'))
+                toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
+            @endif
+
+            // 🔴 ELIMINAR - Rojo
+            @if(session('deleted'))
+                toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
+            @endif
+
+            // ⚠️ ADVERTENCIA - Amarillo
+            @if(session('warning'))
+                toastr.warning('{{ session('warning') }}', '⚠️ ¡Advertencia!');
+            @endif
+
+            // ❌ ERROR - Rojo oscuro
             @if(session('error'))
-                showToast('{{ session('error') }}', 'error');
+                toastr.error('{{ session('error') }}', '❌ ¡Error!');
+            @endif
+
+            // ✅ ÉXITO GENERAL - Verde
+            @if(session('success'))
+                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
             @endif
         });
+        // ==============================================================
     </script>
 
 

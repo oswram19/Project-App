@@ -66,20 +66,34 @@
                 "hideMethod": "fadeOut"
             };
 
-            @if(session('success'))
-                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
+            // 🟢 CREAR - Verde
+            @if(session('created'))
+                toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
             @endif
 
-            @if(session('error'))
-                toastr.error('{{ session('error') }}', '❌ ¡Error!');
+            // 🔵 EDITAR/ACTUALIZAR - Azul
+            @if(session('updated'))
+                toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
             @endif
 
+            // 🔴 ELIMINAR - Rojo
+            @if(session('deleted'))
+                toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
+            @endif
+
+            // ⚠️ ADVERTENCIA - Amarillo
             @if(session('warning'))
                 toastr.warning('{{ session('warning') }}', '⚠️ ¡Advertencia!');
             @endif
 
-            @if(session('info'))
-                toastr.info('{{ session('info') }}', 'ℹ️ Información');
+            // ❌ ERROR - Rojo oscuro
+            @if(session('error'))
+                toastr.error('{{ session('error') }}', '❌ ¡Error!');
+            @endif
+
+            // ✅ ÉXITO GENERAL - Verde
+            @if(session('success'))
+                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
             @endif
             // ==============================================================
         });

@@ -56,7 +56,7 @@ class UserController extends Controller
 
         $user->roles()->sync($request->roles);
 
-        return redirect()->route('admin.users.index')->with('success', 'Usuario creado correctamente');
+        return redirect()->route('admin.users.index')->with('created', 'Usuario creado correctamente');
     }
 
     /**
@@ -87,7 +87,7 @@ class UserController extends Controller
     {
         //
         $user->roles()->sync($request->roles);//sincroniza los roles seleccionados en el formulario con los roles del usuario
-        return redirect()->route('admin.users.edit', $user)->with('success', 'roles asignados correctamente');//redirecciona a la pagina de edicion con un mensaje de exito
+        return redirect()->route('admin.users.edit', $user)->with('updated', 'Roles asignados correctamente');//redirecciona a la pagina de edicion con un mensaje de exito
     }
 
     /**
@@ -135,9 +135,9 @@ class UserController extends Controller
             DB::commit();
             
             if (request()->expectsJson()) {
-                return response()->json(['success' => true, 'message' => 'Usuario eliminado correctamente']);
+                return response()->json(['success' => true, 'message' => 'Usuario eliminado correctamente', 'type' => 'deleted']);
             }
-            return redirect()->route('admin.users.index')->with('success', 'Usuario eliminado correctamente');
+            return redirect()->route('admin.users.index')->with('deleted', 'Usuario eliminado correctamente');
         } catch (\Exception $e) {
             DB::rollBack();
             if (request()->expectsJson()) {
@@ -170,6 +170,6 @@ class UserController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Datos del usuario actualizados correctamente');
+        return redirect()->route('admin.users.index')->with('updated', 'Datos del usuario actualizados correctamente');
     }
 }

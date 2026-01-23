@@ -54,23 +54,45 @@
 @stop
 
 @section('js')
-    @if(session('success'))
-        <script>
-            $(document).ready(function() {
-                toastr.success('{{ session('success') }}');
-            });
-        </script>
-    @endif
-
-    @if(session('error'))
-        <script>
-            $(document).ready(function() {
-                toastr.error('{{ session('error') }}');
-            });
-        </script>
-    @endif
-
     <script>
-        console.log("Formulario de creación de categoría cargado");
+        $(document).ready(function() {
+            // ==================== CONFIGURACIÓN TOAST ====================
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "2000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            @if(session('created'))
+                toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
+            @endif
+
+            @if(session('updated'))
+                toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
+            @endif
+
+            @if(session('deleted'))
+                toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
+            @endif
+
+            @if(session('error'))
+                toastr.error('{{ session('error') }}', '❌ ¡Error!');
+            @endif
+
+            @if(session('success'))
+                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
+            @endif
+            // ==============================================================
+        });
     </script>
 @stop

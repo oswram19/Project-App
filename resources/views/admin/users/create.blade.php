@@ -114,7 +114,45 @@
 
 @section('js')
     <script>
-        console.log("Formulario de creación de usuario cargado");
+        $(document).ready(function() {
+            // ==================== CONFIGURACIÓN TOAST ====================
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "2000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            @if(session('created'))
+                toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
+            @endif
+
+            @if(session('updated'))
+                toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
+            @endif
+
+            @if(session('deleted'))
+                toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
+            @endif
+
+            @if(session('error'))
+                toastr.error('{{ session('error') }}', '❌ ¡Error!');
+            @endif
+
+            @if(session('success'))
+                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
+            @endif
+            // ==============================================================
+        });
 
         // Función para alternar visibilidad de la contraseña
         document.getElementById('togglePassword').addEventListener('click', function() {

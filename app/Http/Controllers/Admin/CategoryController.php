@@ -40,7 +40,7 @@ class CategoryController extends Controller
         ]);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Categoría creada exitosamente');
+            ->with('created', 'Categoría creada exitosamente');
     }
 
     /**
@@ -76,7 +76,7 @@ class CategoryController extends Controller
         ]);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Categoría actualizada exitosamente');
+            ->with('updated', 'Categoría actualizada exitosamente');
     }
 
     /**
@@ -87,7 +87,7 @@ class CategoryController extends Controller
         try {
             $category->delete();
             return redirect()->route('admin.categories.index')
-                ->with('success', 'Categoría eliminada correctamente');
+                ->with('deleted', 'Categoría eliminada correctamente');
         } catch (\Exception $e) {
             return redirect()->route('admin.categories.index')
                 ->with('error', 'Error al eliminar la categoría');

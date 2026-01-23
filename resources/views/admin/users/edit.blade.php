@@ -8,18 +8,6 @@
 @stop
 
 @section('content')
-    <!-- Toast de notificación -->
-    <div class="toast" id="notificationToast" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; min-width: 300px;" data-delay="4000">
-        <div class="toast-header" id="toastHeader">
-            <i class="fas fa-check-circle mr-2" id="toastIcon"></i>
-            <strong class="mr-auto" id="toastTitle">Notificación</strong>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="toast-body" id="toastMessage"></div>
-    </div>
-
     <div class="card">
         <div class="card-body">
             <p class ="h5">Nombre:</p>
@@ -57,42 +45,44 @@
 
 @section('js')
     <script>
-        console.log("sin errores");
-
-        function showToast(message, type) {
-            const toastHeader = document.getElementById('toastHeader');
-            const toastIcon = document.getElementById('toastIcon');
-            const toastTitle = document.getElementById('toastTitle');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toastHeader.classList.remove('bg-success', 'bg-danger', 'bg-primary', 'bg-warning', 'bg-info', 'text-white', 'text-dark');
-            toastIcon.classList.remove('fa-check-circle', 'fa-times-circle', 'fa-user-tag', 'fa-edit');
-            
-            if (type === 'roles') {
-                toastHeader.classList.add('bg-warning', 'text-dark');
-                toastIcon.classList.add('fa-user-tag');
-                toastTitle.textContent = 'Roles Actualizados';
-            } else if (type === 'error') {
-                toastHeader.classList.add('bg-danger', 'text-white');
-                toastIcon.classList.add('fa-times-circle');
-                toastTitle.textContent = 'Error';
-            } else {
-                toastHeader.classList.add('bg-success', 'text-white');
-                toastIcon.classList.add('fa-check-circle');
-                toastTitle.textContent = '¡Éxito!';
-            }
-            
-            toastMessage.textContent = message;
-            $('#notificationToast').toast('show');
-        }
-
         $(document).ready(function() {
-            @if(session('success'))
-                showToast('{{ session('success') }}', 'roles');
+            // ==================== CONFIGURACIÓN TOAST ====================
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": true,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "2000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            @if(session('created'))
+                toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
             @endif
+
+            @if(session('updated'))
+                toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
+            @endif
+
+            @if(session('deleted'))
+                toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
+            @endif
+
             @if(session('error'))
-                showToast('{{ session('error') }}', 'error');
+                toastr.error('{{ session('error') }}', '❌ ¡Error!');
             @endif
+
+            @if(session('success'))
+                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
+            @endif
+            // ==============================================================
         });
     </script>
 @stop
