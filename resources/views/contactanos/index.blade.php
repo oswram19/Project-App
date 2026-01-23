@@ -9,7 +9,7 @@
 
 @section('content')
     @if(session('success'))
-        <div id="success-message" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); background-color: #cfe2ff; border: 1px solid #9ec5fe; color: #084298;" class="px-4 py-3 rounded" role="alert">
+        <div id="success-message" class="px-4 py-3 rounded" role="alert">
             <strong class="font-bold">¡Éxito!</strong>
             <span class="block sm:inline">{{ session('success') }}</span>
         </div>
@@ -64,44 +64,7 @@
 @stop
 
 @section('css')
-    <style>
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        #success-message {
-            animation: slideInRight 0.5s ease-out;
-        }
-        #archivoContainer {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px dashed #dee2e6;
-        }
-        .custom-control-input:checked ~ .custom-control-label::before {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-        .custom-switch .custom-control-label {
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/contactanos.css') }}">
 @stop
 
 @section('js')

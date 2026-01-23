@@ -7,15 +7,6 @@
 @stop
 
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Lista de Categorías</h3>
@@ -57,6 +48,91 @@
     <script>
         $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
+
+            // ==================== CONFIGURACIÓN TOAST MEJORADA ====================
+            toastr.options = {
+                "closeButton": true,              // Botón para cerrar
+                "debug": false,
+                "newestOnTop": true,              // Las nuevas aparecen arriba
+                "progressBar": true,              // Barra de progreso
+                "positionClass": "toast-bottom-right",  // Posición inferior derecha
+                "preventDuplicates": true,        // Evitar duplicados
+                "onclick": null,
+                "showDuration": "400",            // Duración animación entrada
+                "hideDuration": "1000",           // Duración animación salida
+                "timeOut": "5000",                // Tiempo visible (5 segundos)
+                "extendedTimeOut": "2000",        // Tiempo extra al pasar mouse
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            // Estilos personalizados para las notificaciones
+            $('<style>')
+                .prop('type', 'text/css')
+                .html(`
+                    /* Bordes redondeados */
+                    #toast-container > div {
+                        border-radius: 12px !important;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+                        padding: 15px 15px 15px 50px !important;
+                    }
+                    /* Estilo success */
+                    #toast-container > .toast-success {
+                        background-color: #28a745 !important;
+                        opacity: 0.95 !important;
+                    }
+                    /* Estilo error */
+                    #toast-container > .toast-error {
+                        background-color: #dc3545 !important;
+                        opacity: 0.95 !important;
+                    }
+                    /* Estilo warning */
+                    #toast-container > .toast-warning {
+                        background-color: #ffc107 !important;
+                        color: #333 !important;
+                        opacity: 0.95 !important;
+                    }
+                    /* Estilo info */
+                    #toast-container > .toast-info {
+                        background-color: #17a2b8 !important;
+                        opacity: 0.95 !important;
+                    }
+                    /* Título más grande */
+                    #toast-container > div .toast-title {
+                        font-weight: bold;
+                        font-size: 14px;
+                    }
+                    /* Mensaje */
+                    #toast-container > div .toast-message {
+                        font-size: 13px;
+                    }
+                    /* Barra de progreso */
+                    #toast-container > div .toast-progress {
+                        height: 4px;
+                        border-radius: 0 0 12px 12px;
+                        opacity: 0.7;
+                    }
+                `)
+                .appendTo('head');
+
+            @if(session('success'))
+                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
+            @endif
+
+            @if(session('error'))
+                toastr.error('{{ session('error') }}', '❌ ¡Error!');
+            @endif
+
+            @if(session('warning'))
+                toastr.warning('{{ session('warning') }}', '⚠️ ¡Advertencia!');
+            @endif
+
+            @if(session('info'))
+                toastr.info('{{ session('info') }}', 'ℹ️ Información');
+            @endif
+            // =====================================================================
         });
 
         new DataTable('#categories', {
@@ -124,19 +200,19 @@
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = `/admin/categories/${categoryId}`;
-                
+
                 const csrfToken = document.createElement('input');
                 csrfToken.type = 'hidden';
                 csrfToken.name = '_token';
                 csrfToken.value = '{{ csrf_token() }}';
                 form.appendChild(csrfToken);
-                
+
                 const methodField = document.createElement('input');
                 methodField.type = 'hidden';
                 methodField.name = '_method';
                 methodField.value = 'DELETE';
                 form.appendChild(methodField);
-                
+
                 document.body.appendChild(form);
                 form.submit();
             }

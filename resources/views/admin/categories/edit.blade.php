@@ -7,15 +7,6 @@
 @stop
 
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-
     <div class="card">
         <div class="card-body">
             <form action="{{ route('admin.categories.update', $category) }}" method="POST">
@@ -64,6 +55,14 @@
 @stop
 
 @section('js')
+    @if(session('success'))
+        <script>
+            $(document).ready(function() {
+                toastr.success('{{ session('success') }}');
+            });
+        </script>
+    @endif
+    
     <script>
         console.log("Edición de categoría cargada");
     </script>
