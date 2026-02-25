@@ -66,27 +66,27 @@
                 "hideMethod": "fadeOut"
             };
 
-            // 🟢 CREAR - Verde
+            // CREAR - Verde
             @if(session('created'))
                 toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
             @endif
 
-            // 🔵 EDITAR/ACTUALIZAR - Azul
+            //  EDITAR/ACTUALIZAR - Azul
             @if(session('updated'))
                 toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
             @endif
 
-            // 🔴 ELIMINAR - Rojo
+            //  ELIMINAR - Rojo
             @if(session('deleted'))
                 toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
             @endif
 
-            // ⚠️ ADVERTENCIA - Amarillo
+            //  ADVERTENCIA - Amarillo
             @if(session('warning'))
                 toastr.warning('{{ session('warning') }}', '⚠️ ¡Advertencia!');
             @endif
 
-            // ❌ ERROR - Rojo oscuro
+            // ERROR - Rojo oscuro
             @if(session('error'))
                 toastr.error('{{ session('error') }}', '❌ ¡Error!');
             @endif
