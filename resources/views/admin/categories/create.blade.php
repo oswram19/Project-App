@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-action btn-save">
+                    <button type="submit" class="btn btn-action btn-create">
                         <i class="fas fa-save"></i> Crear Categoría
                     </button>
                     <a href="{{ route('admin.categories.index') }}" class="btn btn-action btn-cancel">
@@ -50,7 +50,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}?v={{ filemtime(public_path('css/admin-custom.css')) }}">
 @stop
 
 @section('js')

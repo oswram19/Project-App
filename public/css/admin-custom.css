@@ -3,9 +3,12 @@
     --btn-text: #f8fbff;
     --btn-border: rgba(255, 255, 255, 0.32);
     --btn-radius: 12px;
+    --btn-glow-default: rgba(56, 189, 248, 0.42);
+    --btn-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .btn-action {
+    --btn-glow: var(--btn-glow-default);
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -17,8 +20,8 @@
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
-    box-shadow: 0 10px 24px rgba(7, 24, 39, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    transition: transform 0.22s ease, box-shadow 0.26s ease, filter 0.26s ease;
+    box-shadow: 0 10px 24px rgba(7, 24, 39, 0.16), 0 0 14px rgba(56, 189, 248, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: transform 0.22s var(--btn-ease), box-shadow 0.26s var(--btn-ease), filter 0.26s var(--btn-ease);
 }
 
 .btn-action::before {
@@ -39,8 +42,9 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.35), transparent 42%);
-    opacity: 0.7;
+    background: radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.35), transparent 42%),
+        linear-gradient(125deg, rgba(255, 255, 255, 0.08), transparent 30%, rgba(255, 255, 255, 0.06) 72%, transparent 100%);
+    opacity: 0.75;
     z-index: 0;
     pointer-events: none;
 }
@@ -51,8 +55,9 @@
 }
 
 .btn-action:hover {
-    transform: translateY(-2px) scale(1.01);
-    filter: saturate(1.08);
+    transform: translateY(-2px) scale(1.015);
+    filter: saturate(1.1) brightness(1.03);
+    box-shadow: 0 16px 30px rgba(7, 24, 39, 0.24), 0 0 18px var(--btn-glow), 0 0 34px rgba(7, 24, 39, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-action:hover::before {
@@ -68,7 +73,7 @@
 .btn-action:focus,
 .btn-action:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.18), 0 0 0 6px rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.18), 0 0 0 6px var(--btn-glow), 0 0 20px var(--btn-glow);
 }
 
 .btn-action i {
@@ -76,15 +81,15 @@
 }
 
 .btn-action:hover i {
-    transform: scale(1.1) rotate(-4deg);
+    transform: scale(1.12) rotate(-4deg);
 }
 
 .btn-action:disabled,
 .btn-action.disabled {
-    opacity: 0.55;
-    filter: grayscale(0.2);
+    opacity: 0.58;
+    filter: grayscale(0.28);
     pointer-events: none;
-    box-shadow: 0 6px 12px rgba(7, 24, 39, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 12px rgba(7, 24, 39, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent;
 }
 
 @keyframes btn-scan {
@@ -93,6 +98,7 @@
 }
 
 .btn-edit {
+    --btn-glow: rgba(59, 130, 246, 0.5);
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 58%, #1d4ed8 100%);
     color: #ffffff;
 }
@@ -100,10 +106,11 @@
 .btn-edit:hover {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 58%, #1e40af 100%);
     color: #ffffff;
-    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.35), 0 0 18px rgba(59, 130, 246, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-save {
+    --btn-glow: rgba(6, 182, 212, 0.5);
     background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 60%, #0284c7 100%);
     color: #ffffff;
 }
@@ -111,10 +118,23 @@
 .btn-save:hover {
     background: linear-gradient(135deg, #0891b2 0%, #0284c7 60%, #0369a1 100%);
     color: #ffffff;
-    box-shadow: 0 14px 28px rgba(2, 132, 199, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: 0 14px 28px rgba(2, 132, 199, 0.35), 0 0 18px rgba(6, 182, 212, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn-create {
+    --btn-glow: rgba(96, 165, 250, 0.45);
+    background: linear-gradient(135deg, #334155 0%, #1e3a8a 52%, #1e40af 100%);
+    color: #ffffff;
+}
+
+.btn-create:hover {
+    background: linear-gradient(135deg, #273449 0%, #1e3a8a 46%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: 0 14px 28px rgba(30, 64, 175, 0.34), 0 0 18px rgba(96, 165, 250, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-delete {
+    --btn-glow: rgba(239, 68, 68, 0.5);
     background: linear-gradient(135deg, #fb7185 0%, #ef4444 58%, #dc2626 100%);
     color: #ffffff;
 }
@@ -122,10 +142,11 @@
 .btn-delete:hover {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 58%, #b91c1c 100%);
     color: #ffffff;
-    box-shadow: 0 14px 28px rgba(220, 38, 38, 0.33), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: 0 14px 28px rgba(220, 38, 38, 0.33), 0 0 18px rgba(239, 68, 68, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-cancel {
+    --btn-glow: rgba(100, 116, 139, 0.42);
     background: linear-gradient(135deg, #94a3b8 0%, #64748b 58%, #475569 100%);
     color: #ffffff;
 }
@@ -133,10 +154,11 @@
 .btn-cancel:hover {
     background: linear-gradient(135deg, #64748b 0%, #475569 58%, #334155 100%);
     color: #ffffff;
-    box-shadow: 0 14px 28px rgba(71, 85, 105, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: 0 14px 28px rgba(71, 85, 105, 0.32), 0 0 16px rgba(100, 116, 139, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-roles {
+    --btn-glow: rgba(249, 115, 22, 0.5);
     background: linear-gradient(135deg, #fb923c 0%, #f97316 58%, #ea580c 100%);
     color: #ffffff;
 }
@@ -144,7 +166,282 @@
 .btn-roles:hover {
     background: linear-gradient(135deg, #f97316 0%, #ea580c 58%, #c2410c 100%);
     color: #ffffff;
-    box-shadow: 0 14px 28px rgba(234, 88, 12, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: 0 14px 28px rgba(234, 88, 12, 0.34), 0 0 18px rgba(249, 115, 22, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Sidebar formal */
+.main-sidebar.sidebar-formal {
+    background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+    border-right: 1px solid rgba(148, 163, 184, 0.24);
+}
+
+.main-sidebar.sidebar-formal .brand-link {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    background-color: rgba(15, 23, 42, 0.4);
+}
+
+.main-sidebar.sidebar-formal .brand-text {
+    color: #f3f4f6;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.main-sidebar.sidebar-formal .nav-header {
+    color: #9ca3af;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.main-sidebar.sidebar-formal .nav-sidebar > .nav-item > .nav-link {
+    margin: 0.1rem 0.6rem;
+    border-radius: 0.45rem;
+    color: #d1d5db;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.main-sidebar.sidebar-formal .nav-sidebar > .nav-item > .nav-link:hover {
+    background-color: rgba(148, 163, 184, 0.16);
+    color: #ffffff;
+}
+
+.main-sidebar.sidebar-formal .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: rgba(37, 99, 235, 0.28);
+    color: #ffffff;
+    box-shadow: inset 0 0 0 1px rgba(96, 165, 250, 0.45);
+}
+
+.main-sidebar.sidebar-formal .nav-treeview > .nav-item > .nav-link {
+    margin-left: 1.2rem;
+    border-left: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 0 0.4rem 0.4rem 0;
+}
+
+.main-sidebar.sidebar-formal .nav-link p {
+    font-size: 0.93rem;
+}
+
+.main-sidebar.sidebar-formal .nav-sidebar .menu-open > .nav-link {
+    background-color: rgba(148, 163, 184, 0.14);
+}
+
+.main-sidebar.sidebar-formal .os-scrollbar-handle {
+    background: rgba(148, 163, 184, 0.45) !important;
+}
+
+/* Tema oscuro AdminLTE inspirado en dashboard */
+body.dark-mode {
+    color: #e5e7eb;
+    background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #1e3a8a 100%);
+}
+
+body.dark-mode .wrapper,
+body.dark-mode .content-wrapper,
+body.dark-mode .content,
+body.dark-mode .content-header,
+body.dark-mode .main-footer {
+    background: transparent !important;
+}
+
+body.dark-mode .main-header.navbar {
+    background: rgba(17, 24, 39, 0.84) !important;
+    border-bottom: 1px solid rgba(75, 85, 99, 0.6);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+body.dark-mode .main-header .nav-link,
+body.dark-mode .main-header .navbar-nav .nav-link,
+body.dark-mode .main-header .navbar-brand,
+body.dark-mode .main-header .dropdown-toggle {
+    color: #e5e7eb !important;
+}
+
+body.dark-mode .main-header .nav-link:hover,
+body.dark-mode .main-header .dropdown-item:hover {
+    color: #ffffff !important;
+}
+
+body.dark-mode .main-sidebar.sidebar-formal {
+    background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+    border-right: 1px solid rgba(75, 85, 99, 0.56);
+}
+
+body.dark-mode .main-sidebar.sidebar-formal .brand-link {
+    background-color: rgba(15, 23, 42, 0.62);
+    border-bottom: 1px solid rgba(75, 85, 99, 0.46);
+}
+
+body.dark-mode .main-sidebar.sidebar-formal .nav-sidebar > .nav-item > .nav-link {
+    color: #d1d5db;
+}
+
+body.dark-mode .main-sidebar.sidebar-formal .nav-sidebar > .nav-item > .nav-link:hover {
+    background-color: rgba(148, 163, 184, 0.18);
+    color: #ffffff;
+}
+
+body.dark-mode .main-sidebar.sidebar-formal .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: rgba(59, 130, 246, 0.35);
+    box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.42);
+    color: #ffffff;
+}
+
+body.dark-mode .card {
+    background: rgba(15, 23, 42, 0.74);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    box-shadow: 0 12px 24px rgba(2, 6, 23, 0.3);
+    color: #e5e7eb;
+}
+
+body.dark-mode .card-header,
+body.dark-mode .card-footer {
+    background: rgba(15, 23, 42, 0.66);
+    border-color: rgba(71, 85, 105, 0.46);
+}
+
+body.dark-mode .card-title,
+body.dark-mode .content-header h1,
+body.dark-mode .content-header h2,
+body.dark-mode .content-header h3 {
+    color: #f3f4f6;
+}
+
+body.dark-mode .table {
+    color: #e5e7eb;
+}
+
+body.dark-mode .table thead th {
+    color: #cbd5e1;
+    border-bottom-color: rgba(71, 85, 105, 0.8);
+}
+
+body.dark-mode .table td,
+body.dark-mode .table th {
+    border-top-color: rgba(71, 85, 105, 0.48);
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(odd),
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) td {
+    background-color: rgba(30, 41, 59, 0.38);
+}
+
+body.dark-mode .table-hover tbody tr:hover,
+body.dark-mode .table-hover tbody tr:hover td {
+    background-color: rgba(59, 130, 246, 0.12);
+}
+
+body.dark-mode .table-active,
+body.dark-mode .table-active > td,
+body.dark-mode .table-active > th {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .custom-select,
+body.dark-mode .custom-select-sm,
+body.dark-mode .dataTables_wrapper .dataTables_length select,
+body.dark-mode .dataTables_wrapper .dataTables_filter input {
+    background: rgba(15, 23, 42, 0.78);
+    color: #e5e7eb;
+    border-color: rgba(71, 85, 105, 0.8);
+}
+
+body.dark-mode .form-control::placeholder,
+body.dark-mode .dataTables_wrapper .dataTables_filter input::placeholder {
+    color: #9ca3af;
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .custom-select:focus,
+body.dark-mode .dataTables_wrapper .dataTables_filter input:focus {
+    border-color: rgba(96, 165, 250, 0.7);
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.16);
+}
+
+body.dark-mode .modal-content {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(71, 85, 105, 0.64);
+    color: #e5e7eb;
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+    border-color: rgba(71, 85, 105, 0.56);
+}
+
+body.dark-mode .close,
+body.dark-mode button.close {
+    color: #e5e7eb;
+    text-shadow: none;
+}
+
+body.dark-mode .dataTables_wrapper .dataTables_info,
+body.dark-mode .dataTables_wrapper .dataTables_length,
+body.dark-mode .dataTables_wrapper .dataTables_filter,
+body.dark-mode .dataTables_wrapper .dataTables_paginate {
+    color: #cbd5e1;
+}
+
+body.dark-mode .page-item .page-link {
+    background: rgba(15, 23, 42, 0.72);
+    border-color: rgba(71, 85, 105, 0.52);
+    color: #dbeafe;
+}
+
+body.dark-mode .page-item.active .page-link {
+    background: #1d4ed8;
+    border-color: #2563eb;
+    color: #ffffff;
+}
+
+body.dark-mode .page-item .page-link:hover {
+    background: rgba(30, 64, 175, 0.28);
+    color: #ffffff;
+}
+
+/* Boton modo oscuro estilo dashboard */
+.adminlte-darkmode-widget .nav-link {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-right: 0.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.82);
+    color: #374151;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+    transition: all 0.2s ease;
+}
+
+.adminlte-darkmode-widget .nav-link:hover {
+    background: #ffffff;
+    color: #1f2937;
+    border-color: #94a3b8;
+}
+
+.adminlte-darkmode-widget .nav-link:focus,
+.adminlte-darkmode-widget .nav-link:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
+}
+
+.adminlte-darkmode-widget .nav-link i {
+    font-size: 1.05rem;
+}
+
+body.dark-mode .adminlte-darkmode-widget .nav-link {
+    border-color: #4b5563;
+    background: #1f2937;
+    color: #facc15;
+}
+
+body.dark-mode .adminlte-darkmode-widget .nav-link:hover {
+    background: #374151;
+    color: #fde68a;
+    border-color: #6b7280;
 }
 
 /* Estilos responsive para DataTables */

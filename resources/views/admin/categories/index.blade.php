@@ -14,7 +14,7 @@
                     <i class="fas fa-tag mr-1"></i> Ninguna categoría seleccionada
                 </span>
                 <div class="ml-auto d-flex flex-wrap" style="gap:6px;">
-                    <a href="{{ route('admin.categories.create') }}" class="btn btn-action btn-save btn-sm">
+                    <a href="{{ route('admin.categories.create') }}" class="btn btn-action btn-create btn-sm">
                         <i class="fas fa-plus"></i> Nueva Categoría
                     </a>
                     <a id="btnEditarCategoria" href="#" class="btn btn-sm btn-action btn-edit disabled" aria-disabled="true">
@@ -77,7 +77,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.7/css/responsive.bootstrap4.css">
-    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}?v={{ filemtime(public_path('css/admin-custom.css')) }}">
     <style>
         #categories tbody tr { cursor: pointer; }
     </style>

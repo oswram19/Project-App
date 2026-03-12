@@ -48,7 +48,7 @@
                     <small class="form-text text-muted">Formatos permitidos: PDF, DOC, DOCX, JPG, PNG, GIF, TXT, XLSX. Máximo 10MB.</small>
                 </div>
                 
-                <button type="submit" id="submitBtn" class="btn btn-primary">
+                <button type="submit" id="submitBtn" class="btn btn-action btn-create">
                     <i class="fas fa-paper-plane"></i> <span id="btnText">Enviar</span>
                 </button>
             </form>
@@ -57,7 +57,8 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/contactanos.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}?v={{ filemtime(public_path('css/admin-custom.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/contactanos.css') }}?v={{ filemtime(public_path('css/contactanos.css')) }}">
 @stop
 
 @section('js')

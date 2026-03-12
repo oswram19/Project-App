@@ -52,3 +52,42 @@
 .custom-switch .custom-control-label {
     cursor: pointer;
 }
+
+/* Ajustes dark mode para integrar con el tema del dashboard/admin */
+body.dark-mode #archivoContainer {
+    background: rgba(15, 23, 42, 0.72);
+    border: 1px dashed rgba(71, 85, 105, 0.82);
+}
+
+body.dark-mode #archivoContainer label,
+body.dark-mode #archivoContainer small,
+body.dark-mode .custom-control-label,
+body.dark-mode .form-group > label {
+    color: #e5e7eb;
+}
+
+body.dark-mode .form-text.text-muted {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .custom-control-label::before {
+    background-color: rgba(15, 23, 42, 0.9);
+    border-color: rgba(100, 116, 139, 0.95);
+}
+
+body.dark-mode .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #1d4ed8;
+    border-color: #2563eb;
+}
+
+body.dark-mode .custom-file-label {
+    background: rgba(15, 23, 42, 0.8);
+    color: #e5e7eb;
+    border-color: rgba(71, 85, 105, 0.86);
+}
+
+body.dark-mode .custom-file-label::after {
+    background: rgba(30, 41, 59, 0.95);
+    color: #dbeafe;
+    border-left: 1px solid rgba(71, 85, 105, 0.86);
+}
