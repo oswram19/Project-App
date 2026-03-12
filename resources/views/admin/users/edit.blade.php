@@ -29,7 +29,7 @@
                 @endforeach
 
                 <button type="submit" class="btn btn-action btn-save mt-3">
-                    <i class="fas fa-save"></i> Asignar roles
+                    <i class="fas fa-save"></i> Aceptar
                 </button>
                 <a href="{{ route('admin.users.index') }}" class="btn btn-action btn-cancel mt-3">
                     <i class="fas fa-times"></i> Cancelar

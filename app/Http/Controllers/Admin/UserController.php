@@ -87,7 +87,7 @@ class UserController extends Controller
     {
         //
         $user->roles()->sync($request->roles);//sincroniza los roles seleccionados en el formulario con los roles del usuario
-        return redirect()->route('admin.users.edit', $user)->with('updated', 'Roles asignados correctamente');//redirecciona a la pagina de edicion con un mensaje de exito
+        return redirect()->route('admin.users.index')->with('updated', 'Roles asignados correctamente');//redirecciona al listado principal con un mensaje de exito
     }
 
     /**
