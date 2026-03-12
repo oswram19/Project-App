@@ -759,3 +759,10 @@ body.dark-mode .adminlte-darkmode-widget .nav-link:hover {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.05));
 }
 /* ===================================================================== */
+
+/* ===== Anti-FOUC dark mode: se aplica cuando html.dark existe (antes de body.dark-mode) ===== */
+html.dark,
+html.dark body {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 55%, #1e3a8a 100%);
+    color: #e5e7eb;
+}
