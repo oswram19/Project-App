@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.7/css/responsive.bootstrap4.css">
     <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}">
+    <style>
+        #usuarios tbody tr { cursor: pointer; }
+    </style>
 @endsection
 @section('content_header')
     <h1>lista de usuarios</h1>
@@ -14,28 +17,46 @@
 @stop
 
 @section('content')
+
+    <!-- Panel de acciones externas -->
+    <div class="card mb-2">
+        <div class="card-body py-2">
+            <div class="d-flex align-items-center flex-wrap gap-2">
+                <span class="mr-2 text-muted" id="selectedUserLabel"><i class="fas fa-user mr-1"></i> Ningún usuario seleccionado</span>
+                <div class="ml-auto d-flex flex-wrap" style="gap:6px;">
+                    <a href="{{ route('admin.users.create') }}" class="btn btn-action btn-save btn-sm">
+                        <i class="fas fa-plus"></i> Nuevo Usuario
+                    </a>
+                    <a id="btnEditar" href="#" class="btn btn-sm btn-action btn-edit disabled" aria-disabled="true">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a id="btnRoles" href="#" class="btn btn-sm btn-action btn-roles disabled" aria-disabled="true">
+                        <i class="fas fa-user-tag"></i> Roles
+                    </a>
+                    <button id="btnEliminar" type="button" class="btn btn-sm btn-action btn-delete" disabled>
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Lista de Usuarios</h3>
-            <div class="card-tools">
-                <a href="{{ route('admin.users.create') }}" class="btn btn-action btn-save btn-sm">
-                    <i class="fas fa-plus"></i> Nuevo Usuario
-                </a>
-            </div>
         </div>
         <div class="card-body">
 
-            <table class="table table-striped" id="usuarios">
+            <table class="table table-striped table-hover" id="usuarios">
                 <thead>
                     <tr>
+                        <th style="width:30px;"></th>
                         <th>ID</th>
                         <th>Name</th>
                         <th>correo</th>
                         <th>Incorporación</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
-
             </table>
 
             <!-- Formulario oculto para eliminación -->
@@ -89,65 +110,43 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
 
+        let selectedUser = { id: null, name: '' };
+
+        function updateActionButtons() {
+            const hasSelection = selectedUser.id !== null;
+            const label = document.getElementById('selectedUserLabel');
+
+            if (hasSelection) {
+                label.innerHTML = `<i class="fas fa-user-check mr-1 text-success"></i> <strong>${selectedUser.name}</strong> seleccionado`;
+                $('#btnEditar').removeClass('disabled').attr('aria-disabled', 'false')
+                    .attr('href', `/admin/users/${selectedUser.id}/edit-data`);
+                $('#btnRoles').removeClass('disabled').attr('aria-disabled', 'false')
+                    .attr('href', `/admin/users/${selectedUser.id}/edit`);
+                $('#btnEliminar').prop('disabled', false);
+            } else {
+                label.innerHTML = `<i class="fas fa-user mr-1"></i> Ningún usuario seleccionado`;
+                $('#btnEditar').addClass('disabled').attr('aria-disabled', 'true').attr('href', '#');
+                $('#btnRoles').addClass('disabled').attr('aria-disabled', 'true').attr('href', '#');
+                $('#btnEliminar').prop('disabled', true);
+            }
+        }
+
         new DataTable('#usuarios', {
             ajax: '/datatable/users', //ruta creada en web.php
-            columns: [{
-                    data: 'id'
-                },
-                {
-                    data: 'name'
-                },
-                {
-                    data: 'email'
-                },
-                {
-                    data: 'created_at'
-                },
+            columns: [
                 {
                     data: null,
                     orderable: false,
                     searchable: false,
                     render: function(data, type, row) {
-                        // Escapar el nombre para evitar errores de sintaxis con comillas y caracteres especiales
-                        const escapedName = row.name
-                            .replace(/\\/g, '\\\\')
-                            .replace(/'/g, "\\'")
-                            .replace(/"/g, '\\"')
-                            .replace(/\n/g, '\\n')
-                            .replace(/\r/g, '\\r');
-                        const htmlEscapedName = row.name
-                            .replace(/&/g, '&amp;')
-                            .replace(/</g, '&lt;')
-                            .replace(/>/g, '&gt;')
-                            .replace(/"/g, '&quot;')
-                            .replace(/'/g, '&#039;');
-                        return `
-                            <a href="/admin/users/${row.id}/edit-data" 
-                               class="btn btn-sm btn-action btn-edit" 
-                               data-toggle="tooltip" 
-                               data-placement="top" 
-                               title="Editar datos de ${htmlEscapedName}"> 
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-                            <a href="/admin/users/${row.id}/edit" 
-                               class="btn btn-sm btn-action btn-roles" 
-                               data-toggle="tooltip" 
-                               data-placement="top" 
-                               title="Asignar roles a ${htmlEscapedName}"> 
-                                <i class="fas fa-user-tag"></i> Roles
-                            </a>
-                            <button type="button" 
-                                    class="btn btn-sm btn-action btn-delete" 
-                                    data-toggle="tooltip" 
-                                    data-placement="top" 
-                                    title="Eliminar usuario ${htmlEscapedName}"
-                                    data-user-id="${row.id}"
-                                    data-user-name="${htmlEscapedName}">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        `;
+                        return `<input type="radio" name="userSelect" class="user-radio" value="${row.id}"
+                                    data-name="${row.name.replace(/"/g, '&quot;')}" style="cursor:pointer;">`;
                     }
-                }
+                },
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'email' },
+                { data: 'created_at' }
             ],
             responsive: true,
             autoWidth: true,
@@ -173,30 +172,38 @@
                 }
             },
             drawCallback: function() {
-                // Re-inicializar tooltips después de cada redibujado de la tabla
                 $('[data-toggle="tooltip"]').tooltip();
+                // Restaurar selección visual si el usuario sigue en la página actual
+                if (selectedUser.id !== null) {
+                    $(`input.user-radio[value="${selectedUser.id}"]`).prop('checked', true)
+                        .closest('tr').addClass('table-active');
+                }
             }
         });
 
-        let userToDelete = { id: null, name: '' };
+        // Seleccionar usuario al hacer clic en la fila o en el radio
+        $(document).on('click', '#usuarios tbody tr', function() {
+            const radio = $(this).find('input.user-radio');
+            if (radio.length) {
+                radio.prop('checked', true);
+                $('#usuarios tbody tr').removeClass('table-active');
+                $(this).addClass('table-active');
+                selectedUser.id   = radio.val();
+                selectedUser.name = radio.data('name');
+                updateActionButtons();
+            }
+        });
 
-        function deleteUser(userId, userName) {
-            userToDelete.id = userId;
-            userToDelete.name = userName;
-            document.getElementById('userNameSpan').textContent = userName;
+        // Botón eliminar externo
+        $('#btnEliminar').on('click', function() {
+            if (!selectedUser.id) return;
+            document.getElementById('userNameSpan').textContent = selectedUser.name;
             $('#deleteModal').modal('show');
-        }
-
-        // Event delegation para manejar clics en botones de eliminar
-        $(document).on('click', '.btn-delete', function() {
-            const userId = $(this).data('user-id');
-            const userName = $(this).data('user-name');
-            deleteUser(userId, userName);
         });
 
         document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-            const userId = userToDelete.id;
-            const userName = userToDelete.name;
+            const userId = selectedUser.id;
+            const userName = selectedUser.name;
             $('#deleteModal').modal('hide');
 
             fetch(`/admin/users/${userId}`, {
@@ -216,6 +223,8 @@
                 // Mostrar toast con toastr - Rojo para eliminar
                 if (data.success) {
                     toastr.error(data.message, '🗑️ ¡Eliminado!');
+                    selectedUser = { id: null, name: '' };
+                    updateActionButtons();
                     // Recargar la tabla después de un breve delay
                     setTimeout(() => {
                         $('#usuarios').DataTable().ajax.reload();
@@ -232,6 +241,7 @@
 
         // ==================== CONFIGURACIÓN TOAST ====================
         $(document).ready(function() {
+            updateActionButtons();
             toastr.options = {
                 "closeButton": true,
                 "newestOnTop": true,
