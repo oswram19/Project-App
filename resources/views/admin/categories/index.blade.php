@@ -71,6 +71,18 @@
             </div>
         </div>
     </div>
+
+    <div class="contactanos-splashed is-empty" id="categoriesSplashed">
+        <div class="toast-panel">
+            <div class="toast-item" id="categoriesToastItem">
+                <div class="toast success" id="categoriesToastBox">
+                    <label class="close" id="categoriesToastClose"></label>
+                    <h3 id="categoriesToastTitle">Éxito</h3>
+                    <p id="categoriesToastMessage">Operación completada correctamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -78,6 +90,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.7/css/responsive.bootstrap4.css">
     <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}?v={{ filemtime(public_path('css/admin-custom.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/contactanos.css') }}?v={{ filemtime(public_path('css/contactanos.css')) }}">
     <style>
         #categories tbody tr { cursor: pointer; }
     </style>
@@ -91,6 +104,52 @@
 
     <script>
         let selectedCategory = { id: null, name: '' };
+        const categoriesToastContainer = document.getElementById('categoriesSplashed');
+        const categoriesToastBox = document.getElementById('categoriesToastBox');
+        const categoriesToastTitle = document.getElementById('categoriesToastTitle');
+        const categoriesToastMessage = document.getElementById('categoriesToastMessage');
+        const categoriesToastClose = document.getElementById('categoriesToastClose');
+        let categoriesToastTimer = null;
+
+        function hideCategoriesToast() {
+            if (categoriesToastTimer) {
+                clearTimeout(categoriesToastTimer);
+                categoriesToastTimer = null;
+            }
+
+            if (categoriesToastContainer) {
+                categoriesToastContainer.classList.add('is-empty');
+            }
+        }
+
+        function showCategoriesToast(type, title, message) {
+            if (!categoriesToastContainer || !categoriesToastBox) return;
+
+            const normalizedType = ['success', 'warning', 'error', 'help', 'info'].includes(type) ? type : 'success';
+            categoriesToastBox.classList.remove('help', 'info', 'success', 'warning', 'error');
+            categoriesToastBox.classList.add(normalizedType);
+
+            if (categoriesToastTitle) {
+                categoriesToastTitle.textContent = title || 'Notificación';
+            }
+
+            if (categoriesToastMessage) {
+                categoriesToastMessage.textContent = message || '';
+            }
+
+            if (categoriesToastTimer) {
+                clearTimeout(categoriesToastTimer);
+            }
+
+            categoriesToastContainer.classList.remove('is-empty');
+            categoriesToastTimer = setTimeout(hideCategoriesToast, 4500);
+        }
+
+        if (categoriesToastClose) {
+            categoriesToastClose.addEventListener('click', function() {
+                hideCategoriesToast();
+            });
+        }
 
         function updateCategoryActionButtons() {
             const hasSelection = selectedCategory.id !== null;
@@ -111,6 +170,20 @@
         $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
             updateCategoryActionButtons();
+
+            @if(session('deleted'))
+                showCategoriesToast('error', 'Eliminado', @json(session('deleted')));
+            @elseif(session('created'))
+                showCategoriesToast('success', 'Creado', @json(session('created')));
+            @elseif(session('updated'))
+                showCategoriesToast('info', 'Actualizado', @json(session('updated')));
+            @elseif(session('warning'))
+                showCategoriesToast('warning', 'Advertencia', @json(session('warning')));
+            @elseif(session('error'))
+                showCategoriesToast('error', 'Error', @json(session('error')));
+            @elseif(session('success'))
+                showCategoriesToast('success', 'Éxito', @json(session('success')));
+            @endif
 
             $('#btnEditarCategoria').on('click', function(e) {
                 if ($(this).attr('aria-disabled') === 'true') {
@@ -133,54 +206,6 @@
                 $('#deleteCategoryModal').modal('hide');
                 form.submit();
             });
-
-            // ==================== CONFIGURACIÓN TOAST ====================
-            toastr.options = {
-                "closeButton": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-bottom-right",
-                "preventDuplicates": true,
-                "showDuration": "200",
-                "hideDuration": "500",
-                "timeOut": "5000",
-                "extendedTimeOut": "2000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-
-            // CREAR - Verde
-            @if(session('created'))
-                toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
-            @endif
-
-            //  EDITAR/ACTUALIZAR - Azul
-            @if(session('updated'))
-                toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
-            @endif
-
-            //  ELIMINAR - Rojo
-            @if(session('deleted'))
-                toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
-            @endif
-
-            //  ADVERTENCIA - Amarillo
-            @if(session('warning'))
-                toastr.warning('{{ session('warning') }}', '⚠️ ¡Advertencia!');
-            @endif
-
-            // ERROR - Rojo oscuro
-            @if(session('error'))
-                toastr.error('{{ session('error') }}', '❌ ¡Error!');
-            @endif
-
-            // ✅ ÉXITO GENERAL - Verde
-            @if(session('success'))
-                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
-            @endif
-            // ==============================================================
         });
 
         new DataTable('#categories', {

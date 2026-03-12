@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap4.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.7/css/responsive.bootstrap4.css">
     <link rel="stylesheet" href="{{ asset('css/admin-custom.css') }}?v={{ filemtime(public_path('css/admin-custom.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/contactanos.css') }}?v={{ filemtime(public_path('css/contactanos.css')) }}">
     <style>
         #usuarios tbody tr { cursor: pointer; }
     </style>
@@ -88,6 +89,18 @@
 
         </div>
     </div>
+
+    <div class="contactanos-splashed is-empty" id="usersSplashed">
+        <div class="toast-panel">
+            <div class="toast-item" id="usersToastItem">
+                <div class="toast success" id="usersToastBox">
+                    <label class="close" id="usersToastClose"></label>
+                    <h3 id="usersToastTitle">Éxito</h3>
+                    <p id="usersToastMessage">Operación completada correctamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 
@@ -105,10 +118,52 @@
 
 
     <script>
-        $(document).ready(function() {
-            // Inicializar tooltips de Bootstrap
-            $('[data-toggle="tooltip"]').tooltip();
-        });
+        const usersToastContainer = document.getElementById('usersSplashed');
+        const usersToastBox = document.getElementById('usersToastBox');
+        const usersToastTitle = document.getElementById('usersToastTitle');
+        const usersToastMessage = document.getElementById('usersToastMessage');
+        const usersToastClose = document.getElementById('usersToastClose');
+        let usersToastTimer = null;
+
+        function hideUsersToast() {
+            if (usersToastTimer) {
+                clearTimeout(usersToastTimer);
+                usersToastTimer = null;
+            }
+
+            if (usersToastContainer) {
+                usersToastContainer.classList.add('is-empty');
+            }
+        }
+
+        function showUsersToast(type, title, message) {
+            if (!usersToastContainer || !usersToastBox) return;
+
+            const normalizedType = ['success', 'warning', 'error', 'help', 'info'].includes(type) ? type : 'success';
+            usersToastBox.classList.remove('help', 'info', 'success', 'warning', 'error');
+            usersToastBox.classList.add(normalizedType);
+
+            if (usersToastTitle) {
+                usersToastTitle.textContent = title || 'Notificación';
+            }
+
+            if (usersToastMessage) {
+                usersToastMessage.textContent = message || '';
+            }
+
+            if (usersToastTimer) {
+                clearTimeout(usersToastTimer);
+            }
+
+            usersToastContainer.classList.remove('is-empty');
+            usersToastTimer = setTimeout(hideUsersToast, 4500);
+        }
+
+        if (usersToastClose) {
+            usersToastClose.addEventListener('click', function() {
+                hideUsersToast();
+            });
+        }
 
         let selectedUser = { id: null, name: '' };
 
@@ -220,9 +275,8 @@
             })
             .then(data => {
                 console.log('Response data:', data);
-                // Mostrar toast con toastr - Rojo para eliminar
                 if (data.success) {
-                    toastr.error(data.message, '🗑️ ¡Eliminado!');
+                    showUsersToast('error', 'Eliminado', data.message);
                     selectedUser = { id: null, name: '' };
                     updateActionButtons();
                     // Recargar la tabla después de un breve delay
@@ -230,65 +284,35 @@
                         $('#usuarios').DataTable().ajax.reload();
                     }, 500);
                 } else {
-                    toastr.error(data.message, '❌ ¡Error!');
+                    showUsersToast('error', 'Error', data.message);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                toastr.error('Error al procesar la solicitud.', '❌ ¡Error!');
+                showUsersToast('error', 'Error', 'Error al procesar la solicitud.');
             });
         });
 
-        // ==================== CONFIGURACIÓN TOAST ====================
         $(document).ready(function() {
+            // Inicializar tooltips de Bootstrap
+            $('[data-toggle="tooltip"]').tooltip();
+
             updateActionButtons();
-            toastr.options = {
-                "closeButton": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-bottom-right",
-                "preventDuplicates": true,
-                "showDuration": "400",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "2000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
 
-            // 🟢 CREAR - Verde
-            @if(session('created'))
-                toastr.success('{{ session('created') }}', '🆕 ¡Creado!');
-            @endif
-
-            // 🔵 EDITAR/ACTUALIZAR - Azul
-            @if(session('updated'))
-                toastr.info('{{ session('updated') }}', '✏️ ¡Actualizado!');
-            @endif
-
-            // 🔴 ELIMINAR - Rojo
             @if(session('deleted'))
-                toastr.error('{{ session('deleted') }}', '🗑️ ¡Eliminado!');
-            @endif
-
-            // ⚠️ ADVERTENCIA - Amarillo
-            @if(session('warning'))
-                toastr.warning('{{ session('warning') }}', '⚠️ ¡Advertencia!');
-            @endif
-
-            // ❌ ERROR - Rojo oscuro
-            @if(session('error'))
-                toastr.error('{{ session('error') }}', '❌ ¡Error!');
-            @endif
-
-            // ✅ ÉXITO GENERAL - Verde
-            @if(session('success'))
-                toastr.success('{{ session('success') }}', '✅ ¡Éxito!');
+                showUsersToast('error', 'Eliminado', @json(session('deleted')));
+            @elseif(session('created'))
+                showUsersToast('success', 'Creado', @json(session('created')));
+            @elseif(session('updated'))
+                showUsersToast('info', 'Actualizado', @json(session('updated')));
+            @elseif(session('warning'))
+                showUsersToast('warning', 'Advertencia', @json(session('warning')));
+            @elseif(session('error'))
+                showUsersToast('error', 'Error', @json(session('error')));
+            @elseif(session('success'))
+                showUsersToast('success', 'Éxito', @json(session('success')));
             @endif
         });
-        // ==============================================================
     </script>
 
 

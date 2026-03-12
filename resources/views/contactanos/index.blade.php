@@ -54,6 +54,18 @@
             </form>
         </div>
     </div>
+
+    <div class="contactanos-splashed is-empty" id="contactanosSplashed">
+        <div class="toast-panel">
+            <div class="toast-item" id="contactToastItem">
+                <div class="toast success" id="contactToastBox">
+                    <label class="close" id="contactToastClose"></label>
+                    <h3 id="contactToastTitle">Éxito</h3>
+                    <p id="contactToastMessage">Tu mensaje ha sido enviado correctamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -63,35 +75,62 @@
 
 @section('js')
     <script>
-        // ==================== CONFIGURACIÓN TOAST ====================
-        $(document).ready(function() {
-            toastr.options = {
-                "closeButton": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-bottom-right",
-                "preventDuplicates": true,
-                "showDuration": "400",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "2000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
+        document.addEventListener('DOMContentLoaded', function() {
+            const toastContainer = document.getElementById('contactanosSplashed');
+            const toastBox = document.getElementById('contactToastBox');
+            const toastTitle = document.getElementById('contactToastTitle');
+            const toastMessage = document.getElementById('contactToastMessage');
+            const toastClose = document.getElementById('contactToastClose');
+            let toastTimer = null;
+
+            const hideToast = () => {
+                if (toastTimer) {
+                    clearTimeout(toastTimer);
+                    toastTimer = null;
+                }
+
+                if (toastContainer) {
+                    toastContainer.classList.add('is-empty');
+                }
             };
 
+            const showToast = (type, title, message) => {
+                if (!toastContainer || !toastBox) return;
+
+                const normalizedType = ['success', 'warning', 'error', 'help', 'info'].includes(type) ? type : 'success';
+                toastBox.classList.remove('help', 'info', 'success', 'warning', 'error');
+                toastBox.classList.add(normalizedType);
+
+                if (toastTitle) {
+                    toastTitle.textContent = title || 'Notificación';
+                }
+
+                if (toastMessage) {
+                    toastMessage.textContent = message || '';
+                }
+
+                if (toastTimer) {
+                    clearTimeout(toastTimer);
+                }
+
+                toastContainer.classList.remove('is-empty');
+                toastTimer = setTimeout(hideToast, 4500);
+            };
+
+            if (toastClose) {
+                toastClose.addEventListener('click', function() {
+                    hideToast();
+                });
+            }
+
             @if(session('success'))
-                toastr.success('{{ session('success') }}', '✅ ¡Correo Enviado!');
+                showToast('info', 'Enviado', @json(session('success')));
+            @elseif(session('warning'))
+                showToast('warning', 'Advertencia', @json(session('warning')));
+            @elseif(session('error'))
+                showToast('error', 'Error', @json(session('error')));
             @endif
 
-            @if(session('error'))
-                toastr.error('{{ session('error') }}', '❌ ¡Error!');
-            @endif
-        });
-        // ==============================================================
-        
-        document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('contactForm');
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
