@@ -416,7 +416,7 @@ body.dark-mode .page-item .page-link:hover {
 }
 
 /* Boton modo oscuro estilo dashboard */
-.adminlte-darkmode-widget .nav-link {
+.adminlte-darkmode-widget {
     width: 2.25rem;
     height: 2.25rem;
     margin-right: 0.5rem;
@@ -429,31 +429,29 @@ body.dark-mode .page-item .page-link:hover {
     justify-content: center;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
     transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 0 !important;
 }
 
-.adminlte-darkmode-widget .nav-link:hover {
+.adminlte-darkmode-widget:hover {
     background: #ffffff;
     color: #1f2937;
     border-color: #94a3b8;
 }
 
-.adminlte-darkmode-widget .nav-link:focus,
-.adminlte-darkmode-widget .nav-link:focus-visible {
+.adminlte-darkmode-widget:focus,
+.adminlte-darkmode-widget:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
 }
 
-.adminlte-darkmode-widget .nav-link i {
-    font-size: 1.05rem;
-}
-
-body.dark-mode .adminlte-darkmode-widget .nav-link {
+body.dark-mode .adminlte-darkmode-widget {
     border-color: #4b5563;
     background: #1f2937;
     color: #facc15;
 }
 
-body.dark-mode .adminlte-darkmode-widget .nav-link:hover {
+body.dark-mode .adminlte-darkmode-widget:hover {
     background: #374151;
     color: #fde68a;
     border-color: #6b7280;
