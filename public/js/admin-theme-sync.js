@@ -1,4 +1,8 @@
 (function () {
+    function getDarkmodeButton() {
+        return document.querySelector('.js-darkmode-toggle');
+    }
+
     function getStoredTheme() {
         try {
             return window.localStorage.getItem('theme');
@@ -15,20 +19,72 @@
         }
     }
 
-    function syncDarkmodeIcon(isDark) {
-        var icon = document.querySelector('li.adminlte-darkmode-widget i');
+    function syncIframeTheme(isDark) {
+        var iframes = document.querySelectorAll('div.iframe-mode iframe');
 
-        if (!icon) {
+        iframes.forEach(function (iframe) {
+            try {
+                var iframeBody = iframe.contentDocument && iframe.contentDocument.querySelector('body');
+
+                if (iframeBody) {
+                    iframeBody.classList.toggle('dark-mode', isDark);
+                }
+            } catch (error) {
+                // Ignore cross-origin iframe access errors.
+            }
+        });
+    }
+
+    function syncDarkmodeIcon(isDark) {
+        var button = getDarkmodeButton();
+        var sunIcon = button ? button.querySelector('.darkmode-icon-sun') : null;
+        var moonIcon = button ? button.querySelector('.darkmode-icon-moon') : null;
+        var label;
+
+        if (!button) {
             return;
         }
 
-        icon.classList.remove('far', 'fas', 'fa-moon', 'fa-sun');
+        label = isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro';
 
-        if (isDark) {
-            icon.classList.add('fas', 'fa-sun');
-        } else {
-            icon.classList.add('far', 'fa-moon');
+        if (sunIcon) {
+            sunIcon.classList.toggle('d-none', !isDark);
         }
+
+        if (moonIcon) {
+            moonIcon.classList.toggle('d-none', isDark);
+        }
+
+        button.setAttribute('aria-label', label);
+        button.setAttribute('title', label);
+    }
+
+    function notifyServerToggle() {
+        var button = getDarkmodeButton();
+        var toggleUrl = button ? button.getAttribute('data-toggle-url') : '';
+        var csrfTokenMeta;
+        var headers;
+
+        if (!toggleUrl) {
+            return;
+        }
+
+        csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+        headers = {
+            'X-Requested-With': 'XMLHttpRequest',
+        };
+
+        if (csrfTokenMeta) {
+            headers['X-CSRF-TOKEN'] = csrfTokenMeta.getAttribute('content');
+        }
+
+        window.fetch(toggleUrl, {
+            method: 'POST',
+            headers: headers,
+            credentials: 'same-origin',
+        }).catch(function () {
+            // Ignore notification failures; local preference still works.
+        });
     }
 
     function applyTheme(isDark) {
@@ -41,6 +97,7 @@
 
         body.classList.toggle('dark-mode', isDark);
         html.classList.toggle('dark', isDark);
+        syncIframeTheme(isDark);
         setStoredTheme(isDark ? 'dark' : 'light');
         syncDarkmodeIcon(isDark);
     }
@@ -48,7 +105,7 @@
     function initializeThemeSync() {
         var body = document.body;
         var storedTheme = getStoredTheme();
-        var widget = document.querySelector('li.adminlte-darkmode-widget');
+        var button = getDarkmodeButton();
 
         if (!body) {
             return;
@@ -60,12 +117,14 @@
             applyTheme(body.classList.contains('dark-mode'));
         }
 
-        if (widget) {
-            widget.addEventListener('click', function () {
-                // Wait for AdminLTE widget to toggle classes first.
-                window.setTimeout(function () {
-                    applyTheme(document.body.classList.contains('dark-mode'));
-                }, 0);
+        if (button) {
+            button.addEventListener('click', function (event) {
+                var nextState;
+
+                event.preventDefault();
+                nextState = !document.body.classList.contains('dark-mode');
+                applyTheme(nextState);
+                notifyServerToggle();
             });
         }
 
